@@ -7,18 +7,10 @@
     <!-- Header -->
     <div class="text-center mb-12">
         <h1 class="font-mythical text-4xl text-gold mb-4">
-            {% if lang == "ko" %}
-            신화 속 캐릭터 도감
-            {% else %}
-            Mythical Character Guide
-            {% endif %}
+            {{ t.characters_title if t.characters_title else "Mythical Character Guide" }}
         </h1>
         <p class="text-gray-400 text-lg">
-            {% if lang == "ko" %}
-            총 {{ total_count }}명의 신화적 인물들을 만나보세요
-            {% else %}
-            Explore {{ total_count }} mythological figures from around the world
-            {% endif %}
+            {{ (t.characters_subtitle if t.characters_subtitle else "Explore {count} mythological figures from around the world") | replace("{count}", total_count|string) }}
         </p>
     </div>
 
@@ -27,13 +19,13 @@
         <div class="flex flex-wrap justify-center gap-2">
             <a href="/characters"
                class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black font-semibold' if not selected_category else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
-                {% if lang == "ko" %}전체{% else %}All{% endif %}
+                {{ t.characters_all if t.characters_all else "All" }}
                 <span class="text-xs ml-1 opacity-70">({{ total_count }})</span>
             </a>
             {% for cat in categories %}
             <a href="/characters?category={{ cat.value }}"
                class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black font-semibold' if selected_category == cat.value else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
-                {{ cat.name_ko if lang == "ko" else cat.name_en }}
+                {{ t.cultures[cat.value] if t.cultures and cat.value in t.cultures else (cat.name_ko if lang == "ko" else cat.name_en) }}
                 <span class="text-xs ml-1 opacity-70">({{ category_counts[cat.value] }})</span>
             </a>
             {% endfor %}
@@ -79,22 +71,14 @@
     {% if not characters %}
     <div class="text-center text-gray-400 py-16">
         <div class="text-5xl mb-4">📚</div>
-        {% if lang == "ko" %}
-        해당 카테고리에 캐릭터가 없습니다.
-        {% else %}
-        No characters found in this category.
-        {% endif %}
+        {{ t.characters_empty if t.characters_empty else "No characters found in this category." }}
     </div>
     {% endif %}
 
     <!-- Back to Home -->
     <div class="text-center mt-12">
         <a href="/" class="btn-mythical inline-block">
-            {% if lang == "ko" %}
-            ✨ 나의 신화 찾기
-            {% else %}
-            ✨ Find My Match
-            {% endif %}
+            ✨ {{ t.characters_find_match if t.characters_find_match else "Find My Match" }}
         </a>
     </div>
 </div>

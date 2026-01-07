@@ -13,7 +13,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                {% if lang == "ko" %}캐릭터 목록으로{% else %}Back to Characters{% endif %}
+                {{ t.characters_back }}
             </a>
         </div>
 
@@ -37,7 +37,7 @@
                 <!-- Category Badge -->
                 {% if category %}
                 <span class="inline-block px-4 py-1 rounded-full bg-gold/10 text-gold text-sm border border-gold/30">
-                    {{ category.name_ko if lang == "ko" else category.name_en }}
+                    {{ t.cultures[category.value] if t.cultures and category.value in t.cultures else (category.name_ko if lang == "ko" else category.name_en) }}
                 </span>
                 {% endif %}
 
@@ -58,7 +58,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}성격 특성{% else %}Personality Traits{% endif %}
+                    {{ t.characters_personality }}
                 </h2>
                 <div class="flex flex-wrap gap-3">
                     {% set traits = character.traits_ko if lang == "ko" else character.traits_en %}
@@ -74,7 +74,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}소개{% else %}About{% endif %}
+                    {{ t.characters_about }}
                 </h2>
                 <div class="prose prose-invert max-w-none">
                     {% set description = character.description_ko if lang == "ko" else character.description_en %}
@@ -88,7 +88,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}유명한 이야기{% else %}Famous Story{% endif %}
+                    {{ t.characters_famous_story }}
                 </h2>
                 <div class="card-mythical p-6 bg-gradient-to-br from-white/5 to-transparent">
                     <p class="text-gray-300 leading-relaxed">
@@ -101,7 +101,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}당신과 매칭된다면{% else %}If You Match{% endif %}
+                    {{ t.characters_if_match }}
                 </h2>
                 <div class="card-mythical p-6 border-gold/40 bg-gradient-to-br from-gold/10 to-transparent">
                     <p class="text-gray-200 leading-relaxed">
@@ -115,7 +115,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}다른 이름{% else %}Also Known As{% endif %}
+                    {{ t.characters_also_known }}
                 </h2>
                 <div class="flex flex-wrap gap-2">
                     {% for alias in character.aliases %}
@@ -132,7 +132,7 @@
             <div class="mb-10">
                 <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
                     <span class="text-2xl">✦</span>
-                    {% if lang == "ko" %}관련 인물{% else %}Related Characters{% endif %}
+                    {{ t.characters_related }}
                 </h2>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                     {% for rel in related_characters %}
@@ -153,18 +153,10 @@
         <!-- Actions -->
         <div class="flex flex-wrap justify-center gap-4 mt-8">
             <a href="/" class="btn-mythical">
-                {% if lang == "ko" %}
-                ✨ 나와 닮은 신화 찾기
-                {% else %}
-                ✨ Find My Match
-                {% endif %}
+                ✨ {{ t.characters_find_match }}
             </a>
             <a href="/characters" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
-                {% if lang == "ko" %}
-                📚 다른 캐릭터 보기
-                {% else %}
-                📚 Browse All Characters
-                {% endif %}
+                📚 {{ t.characters_browse_all }}
             </a>
         </div>
     </div>

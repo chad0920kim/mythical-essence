@@ -1,43 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}{% if lang == "ko" %}문의하기{% else %}Contact Us{% endif %} - {{ t.app_name }}{% endblock %}
+{% block title %}{{ t.contact_title }} - {{ t.app_name }}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-6 py-12">
     <div class="max-w-2xl mx-auto">
         <div class="card-mythical p-8">
             <h1 class="font-mythical text-3xl text-gold mb-4 text-center">
-                {% if lang == "ko" %}문의하기{% else %}Contact Us{% endif %}
+                {{ t.contact_title }}
             </h1>
             <p class="text-gray-400 text-center mb-8">
-                {% if lang == "ko" %}
-                서비스 이용 중 궁금한 점이나 건의사항이 있으시면 아래 양식을 통해 문의해 주세요.
-                {% else %}
-                If you have any questions or suggestions, please contact us using the form below.
-                {% endif %}
+                {{ t.contact_subtitle }}
             </p>
 
             <!-- Success Message -->
             <div id="success-message" class="hidden mb-6 p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-300 text-center">
-                {% if lang == "ko" %}
-                문의가 성공적으로 전송되었습니다. 빠른 시일 내에 답변 드리겠습니다.
-                {% else %}
-                Your message has been sent successfully. We will respond as soon as possible.
-                {% endif %}
+                {{ t.contact_success }}
             </div>
 
             <!-- Error Message -->
             <div id="error-message" class="hidden mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-center">
-                {% if lang == "ko" %}
-                전송 중 오류가 발생했습니다. 이메일로 직접 문의해 주세요.
-                {% else %}
-                An error occurred. Please contact us directly via email.
-                {% endif %}
+                {{ t.contact_error }}
             </div>
 
             <form id="contact-form" action="https://formsubmit.co/kyh0920@gmail.com" method="POST" class="space-y-6">
                 <!-- FormSubmit Configuration -->
-                <input type="hidden" name="_subject" value="[Mythical Essence] 새로운 문의">
+                <input type="hidden" name="_subject" value="[Mythical Essence] New Inquiry">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
                 <input type="text" name="_honey" style="display:none">
@@ -46,17 +34,17 @@
                 <!-- Name -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-300 mb-2">
-                        {% if lang == "ko" %}이름{% else %}Name{% endif %} <span class="text-red-400">*</span>
+                        {{ t.contact_name }} <span class="text-red-400">*</span>
                     </label>
                     <input type="text" id="name" name="name" required
                            class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors"
-                           placeholder="{% if lang == 'ko' %}홍길동{% else %}Your name{% endif %}">
+                           placeholder="{{ t.contact_name_placeholder }}">
                 </div>
 
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-2">
-                        {% if lang == "ko" %}이메일{% else %}Email{% endif %} <span class="text-red-400">*</span>
+                        {{ t.contact_email }} <span class="text-red-400">*</span>
                     </label>
                     <input type="email" id="email" name="email" required
                            class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors"
@@ -66,40 +54,32 @@
                 <!-- Subject -->
                 <div>
                     <label for="subject" class="block text-sm font-medium text-gray-300 mb-2">
-                        {% if lang == "ko" %}문의 유형{% else %}Subject{% endif %}
+                        {{ t.contact_subject }}
                     </label>
                     <select id="subject" name="subject"
                             class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors">
-                        {% if lang == "ko" %}
-                        <option value="일반 문의">일반 문의</option>
-                        <option value="서비스 오류 신고">서비스 오류 신고</option>
-                        <option value="기능 제안">기능 제안</option>
-                        <option value="제휴 문의">제휴 문의</option>
-                        <option value="기타">기타</option>
-                        {% else %}
-                        <option value="General Inquiry">General Inquiry</option>
-                        <option value="Bug Report">Bug Report</option>
-                        <option value="Feature Request">Feature Request</option>
-                        <option value="Partnership">Partnership</option>
-                        <option value="Other">Other</option>
-                        {% endif %}
+                        <option value="{{ t.contact_subject_general }}">{{ t.contact_subject_general }}</option>
+                        <option value="{{ t.contact_subject_bug }}">{{ t.contact_subject_bug }}</option>
+                        <option value="{{ t.contact_subject_feature }}">{{ t.contact_subject_feature }}</option>
+                        <option value="{{ t.contact_subject_partnership }}">{{ t.contact_subject_partnership }}</option>
+                        <option value="{{ t.contact_subject_other }}">{{ t.contact_subject_other }}</option>
                     </select>
                 </div>
 
                 <!-- Message -->
                 <div>
                     <label for="message" class="block text-sm font-medium text-gray-300 mb-2">
-                        {% if lang == "ko" %}문의 내용{% else %}Message{% endif %} <span class="text-red-400">*</span>
+                        {{ t.contact_message }} <span class="text-red-400">*</span>
                     </label>
                     <textarea id="message" name="message" rows="5" required
                               class="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white placeholder-gray-500 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold transition-colors resize-none"
-                              placeholder="{% if lang == 'ko' %}문의하실 내용을 입력해 주세요.{% else %}Please enter your message.{% endif %}"></textarea>
+                              placeholder="{{ t.contact_message_placeholder }}"></textarea>
                 </div>
 
                 <!-- Submit Button -->
                 <div class="text-center">
                     <button type="submit" class="btn-mythical w-full sm:w-auto">
-                        {% if lang == "ko" %}문의 보내기{% else %}Send Message{% endif %}
+                        {{ t.contact_submit }}
                     </button>
                 </div>
             </form>
@@ -107,11 +87,7 @@
             <!-- Direct Email Option -->
             <div class="mt-8 pt-6 border-t border-white/10 text-center">
                 <p class="text-gray-400 text-sm mb-2">
-                    {% if lang == "ko" %}
-                    또는 직접 이메일로 문의하실 수 있습니다:
-                    {% else %}
-                    Or you can email us directly:
-                    {% endif %}
+                    {{ t.contact_direct_email }}
                 </p>
                 <a href="mailto:kyh0920@gmail.com" class="text-gold hover:underline">
                     kyh0920@gmail.com
