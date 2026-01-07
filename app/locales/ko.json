@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "당신 안의 신화를 발견하세요",
+  "app_description": "AI가 당신의 얼굴을 분석하여 가장 닮은 신화 속 신을 찾아드립니다",
+
+  "nav_home": "홈",
+  "nav_about": "소개",
+  "nav_gallery": "갤러리",
+
+  "upload_title": "사진을 업로드하세요",
+  "upload_subtitle": "당신과 가장 닮은 신을 찾아보세요",
+  "upload_button": "사진 선택",
+  "upload_drag": "또는 여기에 드래그 앤 드롭",
+  "upload_formats": "지원 형식: JPG, PNG, WebP (최대 10MB)",
+  "upload_privacy": "업로드된 이미지는 분석 후 즉시 삭제됩니다",
+
+  "analyzing": "분석 중...",
+  "analyzing_message": "신들의 세계에서 당신의 본질을 찾고 있습니다",
+
+  "result_title": "당신의 신화적 본질",
+  "result_match": "일치도",
+  "result_culture": "문화권",
+  "result_element": "원소",
+  "result_domain": "영역",
+  "result_symbol": "상징",
+  "result_archetype": "원형",
+  "result_analysis": "분석 결과",
+  "result_share": "결과 공유하기",
+  "result_retry": "다시 테스트하기",
+  "result_other_matches": "다른 매칭 결과",
+
+  "share_twitter": "트위터에 공유",
+  "share_facebook": "페이스북에 공유",
+  "share_copy": "링크 복사",
+  "share_download": "이미지 다운로드",
+
+  "error_no_face": "얼굴을 감지할 수 없습니다. 다른 사진을 시도해주세요.",
+  "error_upload": "업로드 중 오류가 발생했습니다. 다시 시도해주세요.",
+  "error_generic": "문제가 발생했습니다. 다시 시도해주세요.",
+
+  "footer_privacy": "개인정보처리방침",
+  "footer_terms": "이용약관",
+  "footer_contact": "문의하기",
+
+  "cultures": {
+    "greek": "그리스",
+    "roman": "로마",
+    "norse": "북유럽",
+    "egyptian": "이집트",
+    "hindu": "힌두",
+    "chinese": "중국",
+    "japanese": "일본",
+    "korean": "한국",
+    "celtic": "켈트",
+    "slavic": "슬라브",
+    "mesopotamian": "메소포타미아",
+    "arabic": "아랍",
+    "aztec": "아즈텍",
+    "thai": "태국",
+    "vietnamese": "베트남",
+    "indonesian": "인도네시아",
+    "christian": "기독교",
+    "buddhist": "불교",
+    "islamic": "이슬람",
+    "confucian": "유교",
+    "taoist": "도교",
+    "persian": "페르시아",
+    "african": "아프리카",
+    "polynesian": "폴리네시아",
+    "native_american": "아메리카 원주민",
+    "mayan": "마야",
+    "arthurian": "아서왕 전설"
+  },
+
+  "archetypes": {
+    "ruler": "통치자",
+    "creator": "창조자",
+    "sage": "현자",
+    "innocent": "순수한 자",
+    "explorer": "탐험가",
+    "rebel": "반역자",
+    "hero": "영웅",
+    "wizard": "마법사",
+    "jester": "익살꾼",
+    "everyman": "평범한 자",
+    "lover": "연인",
+    "caregiver": "보호자"
+  },
+
+  "elements": {
+    "fire": "불",
+    "water": "물",
+    "earth": "땅",
+    "air": "공기",
+    "sky": "하늘"
+  }
+}

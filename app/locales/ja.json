@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "あなたの中の神話を発見する",
+  "app_description": "AIがあなたの顔を分析し、最も似ている神話の神を見つけます",
+
+  "nav_home": "ホーム",
+  "nav_about": "紹介",
+  "nav_gallery": "ギャラリー",
+
+  "upload_title": "写真をアップロード",
+  "upload_subtitle": "あなたに最も似ている神を見つけましょう",
+  "upload_button": "写真を選択",
+  "upload_drag": "またはここにドラッグ＆ドロップ",
+  "upload_formats": "対応形式：JPG、PNG、WebP（最大10MB）",
+  "upload_privacy": "アップロードされた画像は分析後すぐに削除されます",
+
+  "analyzing": "分析中...",
+  "analyzing_message": "神々の世界であなたの本質を探しています",
+
+  "result_title": "あなたの神話的本質",
+  "result_match": "一致度",
+  "result_culture": "文化圏",
+  "result_element": "元素",
+  "result_domain": "領域",
+  "result_symbol": "象徴",
+  "result_archetype": "原型",
+  "result_analysis": "分析結果",
+  "result_share": "結果を共有",
+  "result_retry": "もう一度テスト",
+  "result_other_matches": "他のマッチング結果",
+
+  "share_twitter": "Twitterで共有",
+  "share_facebook": "Facebookで共有",
+  "share_copy": "リンクをコピー",
+  "share_download": "画像をダウンロード",
+
+  "error_no_face": "顔を検出できませんでした。別の写真をお試しください。",
+  "error_upload": "アップロードエラーが発生しました。もう一度お試しください。",
+  "error_generic": "問題が発生しました。もう一度お試しください。",
+
+  "footer_privacy": "プライバシーポリシー",
+  "footer_terms": "利用規約",
+  "footer_contact": "お問い合わせ",
+
+  "cultures": {
+    "greek": "ギリシャ",
+    "roman": "ローマ",
+    "norse": "北欧",
+    "egyptian": "エジプト",
+    "hindu": "ヒンドゥー",
+    "chinese": "中国",
+    "japanese": "日本",
+    "korean": "韓国",
+    "celtic": "ケルト",
+    "slavic": "スラブ",
+    "mesopotamian": "メソポタミア",
+    "arabic": "アラビア",
+    "aztec": "アステカ",
+    "thai": "タイ",
+    "vietnamese": "ベトナム",
+    "indonesian": "インドネシア",
+    "christian": "キリスト教",
+    "buddhist": "仏教",
+    "islamic": "イスラム",
+    "confucian": "儒教",
+    "taoist": "道教",
+    "persian": "ペルシャ",
+    "african": "アフリカ",
+    "polynesian": "ポリネシア",
+    "native_american": "ネイティブアメリカン",
+    "mayan": "マヤ",
+    "arthurian": "アーサー王伝説"
+  },
+
+  "archetypes": {
+    "ruler": "支配者",
+    "creator": "創造者",
+    "sage": "賢者",
+    "innocent": "純粋な者",
+    "explorer": "探検家",
+    "rebel": "反逆者",
+    "hero": "英雄",
+    "wizard": "魔法使い",
+    "jester": "道化師",
+    "everyman": "平凡な人",
+    "lover": "恋人",
+    "caregiver": "保護者"
+  },
+
+  "elements": {
+    "fire": "火",
+    "water": "水",
+    "earth": "土",
+    "air": "空気",
+    "sky": "天"
+  }
+}

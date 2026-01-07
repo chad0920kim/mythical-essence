@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ god.id.replace('_', ' ') | title }} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-2xl mx-auto">
+        <div class="card-mythical p-8">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-700 mb-4">
+                    <div class="w-32 h-32 rounded-full flex items-center justify-center text-5xl"
+                         style="background: linear-gradient(135deg, {{ god.color }}33 0%, {{ god.color }}11 100%);">
+                        {% set archetype_emojis = {
+                            'ruler': '👑', 'sage': '📚', 'hero': '⚔️', 'rebel': '🔥',
+                            'wizard': '🔮', 'lover': '💕', 'jester': '🎭', 'caregiver': '💝',
+                            'creator': '✨', 'innocent': '🌟', 'explorer': '🧭', 'everyman': '🤝'
+                        } %}
+                        {{ archetype_emojis[god.archetype.value] if god.archetype.value in archetype_emojis else '✦' }}
+                    </div>
+                </div>
+                <h1 class="font-mythical text-4xl text-gold mb-2">
+                    {{ god.id.replace('_', ' ') | title }}
+                </h1>
+                <p class="text-gray-400">
+                    {{ t.cultures[god.culture.value] if god.culture.value in t.cultures else god.culture.value | title }}
+                </p>
+            </div>
+
+            <!-- Details -->
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="card-mythical p-4">
+                    <div class="text-gray-400 text-sm mb-1">{{ t.result_archetype }}</div>
+                    <div class="text-white">
+                        {{ t.archetypes[god.archetype.value] if god.archetype.value in t.archetypes else god.archetype.value | title }}
+                    </div>
+                </div>
+                <div class="card-mythical p-4">
+                    <div class="text-gray-400 text-sm mb-1">{{ t.result_element }}</div>
+                    <div class="text-white">
+                        {{ t.elements[god.element] if god.element in t.elements else god.element | title }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4 mb-8">
+                <div class="card-mythical p-4">
+                    <div class="text-gray-400 text-sm mb-1">{{ t.result_domain }}</div>
+                    <div class="text-white">{{ god.domain }}</div>
+                </div>
+                <div class="card-mythical p-4">
+                    <div class="text-gray-400 text-sm mb-1">{{ t.result_symbol }}</div>
+                    <div class="text-white">{{ god.symbol }}</div>
+                </div>
+            </div>
+
+            <!-- Color indicator -->
+            <div class="flex items-center justify-center gap-3 mb-8">
+                <span class="text-gray-400">Associated Color:</span>
+                <div class="w-8 h-8 rounded-full border-2 border-white/20"
+                     style="background-color: {{ god.color }}"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-center gap-4">
+                <a href="/" class="btn-mythical">
+                    ✨ Find Your Match
+                </a>
+                <a href="/gallery" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                    ← {{ t.nav_gallery }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

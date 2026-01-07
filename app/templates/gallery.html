@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.nav_gallery }} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <h1 class="font-mythical text-4xl text-center text-gold mb-8">
+        {{ t.nav_gallery }}
+    </h1>
+
+    <!-- Culture Filter -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12">
+        <a href="/gallery"
+           class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black' if not selected_culture else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
+            All
+        </a>
+        {% for culture in cultures %}
+        <a href="/gallery?culture={{ culture.value }}"
+           class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black' if selected_culture == culture.value else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
+            {{ t.cultures[culture.value] if culture.value in t.cultures else culture.value | title }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Gods Grid -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {% for god in gods %}
+        <a href="/god/{{ god.id }}" class="card-mythical p-4 hover:glow-gold transition-all group">
+            <div class="aspect-square rounded-lg mb-3 flex items-center justify-center text-4xl"
+                 style="background: linear-gradient(135deg, {{ god.color }}22 0%, {{ god.color }}11 100%);">
+                {% set archetype_emojis = {
+                    'ruler': '👑', 'sage': '📚', 'hero': '⚔️', 'rebel': '🔥',
+                    'wizard': '🔮', 'lover': '💕', 'jester': '🎭', 'caregiver': '💝',
+                    'creator': '✨', 'innocent': '🌟', 'explorer': '🧭', 'everyman': '🤝'
+                } %}
+                {{ archetype_emojis[god.archetype.value] if god.archetype.value in archetype_emojis else '✦' }}
+            </div>
+            <h3 class="font-mythical text-sm text-white group-hover:text-gold transition-colors truncate">
+                {{ god.id.replace('_', ' ') | title }}
+            </h3>
+            <p class="text-xs text-gray-400">
+                {{ t.cultures[god.culture.value] if god.culture.value in t.cultures else god.culture.value | title }}
+            </p>
+        </a>
+        {% endfor %}
+    </div>
+
+    {% if not gods %}
+    <div class="text-center text-gray-400 py-16">
+        No gods found for this culture.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

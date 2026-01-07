@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Error - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-24">
+    <div class="text-center">
+        <div class="text-8xl mb-6">😢</div>
+        <h1 class="font-mythical text-4xl text-gold mb-4">
+            {{ error or "Something went wrong" }}
+        </h1>
+        <p class="text-gray-400 mb-8">
+            {{ t.error_generic }}
+        </p>
+        <a href="/" class="btn-mythical inline-block">
+            ← {{ t.nav_home }}
+        </a>
+    </div>
+</div>
+{% endblock %}

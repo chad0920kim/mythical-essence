@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Discover the Divine Within You",
+  "app_description": "AI analyzes your face to find your mythological counterpart",
+
+  "nav_home": "Home",
+  "nav_about": "About",
+  "nav_gallery": "Gallery",
+
+  "upload_title": "Upload Your Photo",
+  "upload_subtitle": "Find the deity that mirrors your essence",
+  "upload_button": "Choose Photo",
+  "upload_drag": "or drag and drop here",
+  "upload_formats": "Supported formats: JPG, PNG, WebP (max 10MB)",
+  "upload_privacy": "Uploaded images are deleted immediately after analysis",
+
+  "analyzing": "Analyzing...",
+  "analyzing_message": "Searching for your essence in the realm of gods",
+
+  "result_title": "Your Mythical Essence",
+  "result_match": "Match Score",
+  "result_culture": "Culture",
+  "result_element": "Element",
+  "result_domain": "Domain",
+  "result_symbol": "Symbol",
+  "result_archetype": "Archetype",
+  "result_analysis": "Analysis",
+  "result_share": "Share Result",
+  "result_retry": "Try Again",
+  "result_other_matches": "Other Matches",
+
+  "share_twitter": "Share on Twitter",
+  "share_facebook": "Share on Facebook",
+  "share_copy": "Copy Link",
+  "share_download": "Download Image",
+
+  "error_no_face": "No face detected. Please try another photo.",
+  "error_upload": "Upload error. Please try again.",
+  "error_generic": "Something went wrong. Please try again.",
+
+  "footer_privacy": "Privacy Policy",
+  "footer_terms": "Terms of Service",
+  "footer_contact": "Contact",
+
+  "cultures": {
+    "greek": "Greek",
+    "roman": "Roman",
+    "norse": "Norse",
+    "egyptian": "Egyptian",
+    "hindu": "Hindu",
+    "chinese": "Chinese",
+    "japanese": "Japanese",
+    "korean": "Korean",
+    "celtic": "Celtic",
+    "slavic": "Slavic",
+    "mesopotamian": "Mesopotamian",
+    "arabic": "Arabic",
+    "aztec": "Aztec",
+    "thai": "Thai",
+    "vietnamese": "Vietnamese",
+    "indonesian": "Indonesian",
+    "christian": "Christian",
+    "buddhist": "Buddhist",
+    "islamic": "Islamic",
+    "confucian": "Confucian",
+    "taoist": "Taoist",
+    "persian": "Persian",
+    "african": "African",
+    "polynesian": "Polynesian",
+    "native_american": "Native American",
+    "mayan": "Mayan",
+    "arthurian": "Arthurian"
+  },
+
+  "archetypes": {
+    "ruler": "Ruler",
+    "creator": "Creator",
+    "sage": "Sage",
+    "innocent": "Innocent",
+    "explorer": "Explorer",
+    "rebel": "Rebel",
+    "hero": "Hero",
+    "wizard": "Wizard",
+    "jester": "Jester",
+    "everyman": "Everyman",
+    "lover": "Lover",
+    "caregiver": "Caregiver"
+  },
+
+  "elements": {
+    "fire": "Fire",
+    "water": "Water",
+    "earth": "Earth",
+    "air": "Air",
+    "sky": "Sky"
+  }
+}

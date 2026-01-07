@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.result_title }} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="text-center">
+        <h1 class="font-mythical text-4xl text-gold mb-8">
+            {{ t.result_title }}
+        </h1>
+        <p class="text-gray-400 mb-8">
+            Result ID: {{ result_id }}
+        </p>
+        <a href="/" class="btn-mythical inline-block">
+            ✨ {{ t.result_retry }}
+        </a>
+    </div>
+</div>
+{% endblock %}

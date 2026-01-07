@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "发现你内心的神话",
+  "app_description": "AI分析你的面容，找到与你最相似的神话人物",
+
+  "nav_home": "首页",
+  "nav_about": "关于",
+  "nav_gallery": "图库",
+
+  "upload_title": "上传你的照片",
+  "upload_subtitle": "找到与你最相似的神",
+  "upload_button": "选择照片",
+  "upload_drag": "或拖拽到此处",
+  "upload_formats": "支持格式：JPG、PNG、WebP（最大10MB）",
+  "upload_privacy": "上传的图片在分析后立即删除",
+
+  "analyzing": "分析中...",
+  "analyzing_message": "正在神话世界中寻找你的本质",
+
+  "result_title": "你的神话本质",
+  "result_match": "匹配度",
+  "result_culture": "文化",
+  "result_element": "元素",
+  "result_domain": "领域",
+  "result_symbol": "象征",
+  "result_archetype": "原型",
+  "result_analysis": "分析结果",
+  "result_share": "分享结果",
+  "result_retry": "重新测试",
+  "result_other_matches": "其他匹配结果",
+
+  "share_twitter": "分享到推特",
+  "share_facebook": "分享到脸书",
+  "share_copy": "复制链接",
+  "share_download": "下载图片",
+
+  "error_no_face": "未检测到人脸，请尝试其他照片。",
+  "error_upload": "上传出错，请重试。",
+  "error_generic": "出现问题，请重试。",
+
+  "footer_privacy": "隐私政策",
+  "footer_terms": "服务条款",
+  "footer_contact": "联系我们",
+
+  "cultures": {
+    "greek": "希腊",
+    "roman": "罗马",
+    "norse": "北欧",
+    "egyptian": "埃及",
+    "hindu": "印度教",
+    "chinese": "中国",
+    "japanese": "日本",
+    "korean": "韩国",
+    "celtic": "凯尔特",
+    "slavic": "斯拉夫",
+    "mesopotamian": "美索不达米亚",
+    "arabic": "阿拉伯",
+    "aztec": "阿兹特克",
+    "thai": "泰国",
+    "vietnamese": "越南",
+    "indonesian": "印度尼西亚",
+    "christian": "基督教",
+    "buddhist": "佛教",
+    "islamic": "伊斯兰",
+    "confucian": "儒家",
+    "taoist": "道教",
+    "persian": "波斯",
+    "african": "非洲",
+    "polynesian": "波利尼西亚",
+    "native_american": "美洲原住民",
+    "mayan": "玛雅",
+    "arthurian": "亚瑟王传说"
+  },
+
+  "archetypes": {
+    "ruler": "统治者",
+    "creator": "创造者",
+    "sage": "智者",
+    "innocent": "纯真者",
+    "explorer": "探索者",
+    "rebel": "反叛者",
+    "hero": "英雄",
+    "wizard": "魔法师",
+    "jester": "小丑",
+    "everyman": "平凡人",
+    "lover": "恋人",
+    "caregiver": "照顾者"
+  },
+
+  "elements": {
+    "fire": "火",
+    "water": "水",
+    "earth": "土",
+    "air": "气",
+    "sky": "天"
+  }
+}

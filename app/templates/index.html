@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="font-mythical text-5xl md:text-6xl text-gold mb-4 animate-float">
+            {{ t.app_tagline }}
+        </h1>
+        <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            {{ t.app_description }}
+        </p>
+    </div>
+
+    <!-- Upload Section -->
+    <div class="max-w-xl mx-auto">
+        <div class="card-mythical p-8">
+            <h2 class="font-mythical text-2xl text-center text-gold mb-6">
+                {{ t.upload_title }}
+            </h2>
+            <p class="text-center text-gray-400 mb-8">
+                {{ t.upload_subtitle }}
+            </p>
+
+            <!-- Upload Zone -->
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div id="uploadZone" class="upload-zone rounded-xl p-12 text-center cursor-pointer transition-all">
+                    <div id="uploadContent">
+                        <div class="text-6xl mb-4">📸</div>
+                        <button type="button" class="btn-mythical mb-4" onclick="document.getElementById('fileInput').click()">
+                            {{ t.upload_button }}
+                        </button>
+                        <p class="text-gray-400">{{ t.upload_drag }}</p>
+                        <p class="text-sm text-gray-500 mt-2">{{ t.upload_formats }}</p>
+                    </div>
+
+                    <!-- Preview (hidden by default) -->
+                    <div id="previewContent" class="hidden">
+                        <img id="previewImage" src="" alt="Preview" class="max-h-64 mx-auto rounded-lg mb-4">
+                        <button type="button" class="text-gold hover:underline" onclick="resetUpload()">
+                            {{ t.upload_button }}
+                        </button>
+                    </div>
+
+                    <input type="file" id="fileInput" name="file" accept="image/jpeg,image/png,image/webp" class="hidden">
+                </div>
+
+                <!-- Analyze Button -->
+                <button type="submit" id="analyzeBtn" class="btn-mythical w-full mt-6 hidden">
+                    <span id="analyzeBtnText">✨ {{ t.analyzing }}</span>
+                </button>
+            </form>
+
+            <p class="text-center text-sm text-gray-500 mt-6">
+                🔒 {{ t.upload_privacy }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+        <div class="text-center">
+            <div class="text-6xl mb-6 animate-float">⚡</div>
+            <h3 class="font-mythical text-2xl text-gold mb-2">{{ t.analyzing }}</h3>
+            <p class="text-gray-300">{{ t.analyzing_message }}</p>
+            <div class="mt-8 w-64 h-1 bg-gray-700 rounded-full overflow-hidden mx-auto">
+                <div class="h-full bg-gold shimmer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden overflow-y-auto py-8">
+        <div class="card-mythical max-w-2xl w-full mx-4 p-8">
+            <h2 class="font-mythical text-3xl text-center text-gold mb-8">
+                {{ t.result_title }}
+            </h2>
+
+            <!-- Primary Match -->
+            <div id="primaryMatch" class="text-center mb-8">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <!-- Match Details -->
+            <div id="matchDetails" class="grid grid-cols-2 gap-4 mb-8">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <!-- Analysis -->
+            <div id="analysisText" class="text-gray-300 text-center mb-8 italic">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <!-- Other Matches -->
+            <div id="otherMatches" class="mb-8">
+                <h3 class="font-mythical text-lg text-gold mb-4">{{ t.result_other_matches }}</h3>
+                <div id="otherMatchesList" class="flex gap-2 flex-wrap">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="shareResult()" class="btn-mythical">
+                    🔗 {{ t.result_share }}
+                </button>
+                <button onclick="closeResult()" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                    🔄 {{ t.result_retry }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const translations = {{ t | tojson | safe }};
+
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const uploadForm = document.getElementById('uploadForm');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const resultModal = document.getElementById('resultModal');
+
+let selectedFile = null;
+
+// Drag and drop handlers
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('dragover');
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('dragover');
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('dragover');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleFile(files[0]);
+    }
+});
+
+uploadZone.addEventListener('click', () => {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+    }
+});
+
+function handleFile(file) {
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Please upload a JPG, PNG, or WebP image.');
+        return;
+    }
+
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        alert('File is too large. Maximum size is 10MB.');
+        return;
+    }
+
+    selectedFile = file;
+
+    // Show preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        document.getElementById('previewImage').src = e.target.result;
+        document.getElementById('uploadContent').classList.add('hidden');
+        document.getElementById('previewContent').classList.remove('hidden');
+        analyzeBtn.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+function resetUpload() {
+    selectedFile = null;
+    fileInput.value = '';
+    document.getElementById('uploadContent').classList.remove('hidden');
+    document.getElementById('previewContent').classList.add('hidden');
+    analyzeBtn.classList.add('hidden');
+}
+
+uploadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!selectedFile) return;
+
+    loadingOverlay.classList.remove('hidden');
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+        const response = await fetch('/analyze', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        loadingOverlay.classList.add('hidden');
+
+        if (data.success) {
+            showResult(data);
+        } else {
+            alert(data.detail || translations.error_generic);
+        }
+    } catch (error) {
+        loadingOverlay.classList.add('hidden');
+        alert(translations.error_generic);
+        console.error(error);
+    }
+});
+
+function showResult(data) {
+    const match = data.primary_match;
+
+    // Primary match display
+    document.getElementById('primaryMatch').innerHTML = `
+        <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-700 mb-4">
+            <div class="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center text-5xl">
+                ${getGodEmoji(match.archetype)}
+            </div>
+        </div>
+        <h3 class="font-mythical text-3xl text-white mb-2">${match.god_name}</h3>
+        <div class="text-gold text-xl">${match.match_score}% ${translations.result_match}</div>
+    `;
+
+    // Match details
+    const cultureLabel = translations.cultures?.[match.culture] || match.culture;
+    const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
+    const elementLabel = translations.elements?.[match.element] || match.element;
+
+    document.getElementById('matchDetails').innerHTML = `
+        <div class="card-mythical p-4 text-center">
+            <div class="text-gray-400 text-sm mb-1">${translations.result_culture}</div>
+            <div class="text-white">${cultureLabel}</div>
+        </div>
+        <div class="card-mythical p-4 text-center">
+            <div class="text-gray-400 text-sm mb-1">${translations.result_archetype}</div>
+            <div class="text-white">${archetypeLabel}</div>
+        </div>
+        <div class="card-mythical p-4 text-center">
+            <div class="text-gray-400 text-sm mb-1">${translations.result_element}</div>
+            <div class="text-white">${elementLabel}</div>
+        </div>
+        <div class="card-mythical p-4 text-center">
+            <div class="text-gray-400 text-sm mb-1">${translations.result_domain}</div>
+            <div class="text-white text-sm">${match.domain}</div>
+        </div>
+    `;
+
+    // Analysis text
+    document.getElementById('analysisText').innerHTML = `"${match.reasoning}"`;
+
+    // Other matches
+    const otherMatchesHtml = data.other_matches.map(m => {
+        const culture = translations.cultures?.[m.culture] || m.culture;
+        return `
+            <div class="card-mythical px-4 py-2 text-sm">
+                <span class="text-white">${m.god_name}</span>
+                <span class="text-gray-400">(${m.match_score}%)</span>
+            </div>
+        `;
+    }).join('');
+    document.getElementById('otherMatchesList').innerHTML = otherMatchesHtml;
+
+    resultModal.classList.remove('hidden');
+}
+
+function getGodEmoji(archetype) {
+    const emojis = {
+        'ruler': '👑',
+        'sage': '📚',
+        'hero': '⚔️',
+        'rebel': '🔥',
+        'wizard': '🔮',
+        'lover': '💕',
+        'jester': '🎭',
+        'caregiver': '💝',
+        'creator': '✨',
+        'innocent': '🌟',
+        'explorer': '🧭',
+        'everyman': '🤝'
+    };
+    return emojis[archetype] || '✦';
+}
+
+function closeResult() {
+    resultModal.classList.add('hidden');
+    resetUpload();
+}
+
+function shareResult() {
+    // Simple share implementation
+    if (navigator.share) {
+        navigator.share({
+            title: translations.app_name,
+            text: translations.app_description,
+            url: window.location.href
+        });
+    } else {
+        // Copy to clipboard
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+    }
+}
+</script>
+{% endblock %}
