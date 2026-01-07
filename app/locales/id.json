@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Temukan yang ilahi dalam dirimu",
+  "app_description": "AI menganalisis wajahmu untuk menemukan pasangan mitologismu",
+
+  "nav_home": "Beranda",
+  "nav_about": "Tentang",
+  "nav_gallery": "Galeri",
+
+  "upload_title": "Unggah fotomu",
+  "upload_subtitle": "Temukan dewa yang mencerminkan esensimu",
+  "upload_button": "Pilih foto",
+  "upload_drag": "atau seret dan lepas di sini",
+  "upload_formats": "Format yang didukung: JPG, PNG, WebP (maks. 10MB)",
+  "upload_privacy": "Gambar yang diunggah akan dihapus segera setelah analisis",
+
+  "analyzing": "Menganalisis...",
+  "analyzing_message": "Mencari esensimu di alam para dewa",
+
+  "result_title": "Esensi mitologismu",
+  "result_match": "Skor kecocokan",
+  "result_culture": "Budaya",
+  "result_element": "Elemen",
+  "result_domain": "Domain",
+  "result_symbol": "Simbol",
+  "result_archetype": "Arketipe",
+  "result_analysis": "Analisis",
+  "result_share": "Bagikan hasil",
+  "result_retry": "Coba lagi",
+  "result_other_matches": "Kecocokan lainnya",
+
+  "share_twitter": "Bagikan di Twitter",
+  "share_facebook": "Bagikan di Facebook",
+  "share_copy": "Salin tautan",
+  "share_download": "Unduh gambar",
+
+  "error_no_face": "Tidak ada wajah terdeteksi. Silakan coba foto lain.",
+  "error_upload": "Kesalahan unggah. Silakan coba lagi.",
+  "error_generic": "Terjadi kesalahan. Silakan coba lagi.",
+
+  "footer_privacy": "Kebijakan privasi",
+  "footer_terms": "Ketentuan layanan",
+  "footer_contact": "Kontak",
+
+  "cultures": {
+    "greek": "Yunani",
+    "roman": "Romawi",
+    "norse": "Nordik",
+    "egyptian": "Mesir",
+    "hindu": "Hindu",
+    "chinese": "Tiongkok",
+    "japanese": "Jepang",
+    "korean": "Korea",
+    "celtic": "Keltik",
+    "slavic": "Slavia",
+    "mesopotamian": "Mesopotamia",
+    "arabic": "Arab",
+    "aztec": "Aztec",
+    "thai": "Thailand",
+    "vietnamese": "Vietnam",
+    "indonesian": "Indonesia",
+    "christian": "Kristen",
+    "buddhist": "Buddha",
+    "islamic": "Islam",
+    "confucian": "Konfusianisme",
+    "taoist": "Taoisme",
+    "persian": "Persia",
+    "african": "Afrika",
+    "polynesian": "Polinesia",
+    "native_american": "Pribumi Amerika",
+    "mayan": "Maya",
+    "arthurian": "Arthur"
+  },
+
+  "archetypes": {
+    "ruler": "Penguasa",
+    "creator": "Pencipta",
+    "sage": "Orang bijak",
+    "innocent": "Orang tak berdosa",
+    "explorer": "Penjelajah",
+    "rebel": "Pemberontak",
+    "hero": "Pahlawan",
+    "wizard": "Penyihir",
+    "jester": "Badut",
+    "everyman": "Orang biasa",
+    "lover": "Kekasih",
+    "caregiver": "Pengasuh"
+  },
+
+  "elements": {
+    "fire": "Api",
+    "water": "Air",
+    "earth": "Tanah",
+    "air": "Udara",
+    "sky": "Langit"
+  }
+}

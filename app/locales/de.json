@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Entdecke das Göttliche in dir",
+  "app_description": "KI analysiert dein Gesicht, um dein mythologisches Gegenstück zu finden",
+
+  "nav_home": "Startseite",
+  "nav_about": "Über uns",
+  "nav_gallery": "Galerie",
+
+  "upload_title": "Lade dein Foto hoch",
+  "upload_subtitle": "Finde die Gottheit, die dein Wesen widerspiegelt",
+  "upload_button": "Foto auswählen",
+  "upload_drag": "oder hier ablegen",
+  "upload_formats": "Unterstützte Formate: JPG, PNG, WebP (max. 10MB)",
+  "upload_privacy": "Hochgeladene Bilder werden nach der Analyse sofort gelöscht",
+
+  "analyzing": "Analysiere...",
+  "analyzing_message": "Wir suchen nach deinem Wesen im Reich der Götter",
+
+  "result_title": "Deine mythische Essenz",
+  "result_match": "Übereinstimmung",
+  "result_culture": "Kultur",
+  "result_element": "Element",
+  "result_domain": "Bereich",
+  "result_symbol": "Symbol",
+  "result_archetype": "Archetyp",
+  "result_analysis": "Analyse",
+  "result_share": "Ergebnis teilen",
+  "result_retry": "Erneut versuchen",
+  "result_other_matches": "Weitere Übereinstimmungen",
+
+  "share_twitter": "Auf Twitter teilen",
+  "share_facebook": "Auf Facebook teilen",
+  "share_copy": "Link kopieren",
+  "share_download": "Bild herunterladen",
+
+  "error_no_face": "Kein Gesicht erkannt. Bitte versuche ein anderes Foto.",
+  "error_upload": "Fehler beim Hochladen. Bitte erneut versuchen.",
+  "error_generic": "Etwas ist schief gelaufen. Bitte erneut versuchen.",
+
+  "footer_privacy": "Datenschutz",
+  "footer_terms": "Nutzungsbedingungen",
+  "footer_contact": "Kontakt",
+
+  "cultures": {
+    "greek": "Griechisch",
+    "roman": "Römisch",
+    "norse": "Nordisch",
+    "egyptian": "Ägyptisch",
+    "hindu": "Hindu",
+    "chinese": "Chinesisch",
+    "japanese": "Japanisch",
+    "korean": "Koreanisch",
+    "celtic": "Keltisch",
+    "slavic": "Slawisch",
+    "mesopotamian": "Mesopotamisch",
+    "arabic": "Arabisch",
+    "aztec": "Aztekisch",
+    "thai": "Thailändisch",
+    "vietnamese": "Vietnamesisch",
+    "indonesian": "Indonesisch",
+    "christian": "Christlich",
+    "buddhist": "Buddhistisch",
+    "islamic": "Islamisch",
+    "confucian": "Konfuzianisch",
+    "taoist": "Taoistisch",
+    "persian": "Persisch",
+    "african": "Afrikanisch",
+    "polynesian": "Polynesisch",
+    "native_american": "Indianisch",
+    "mayan": "Maya",
+    "arthurian": "Arthurianisch"
+  },
+
+  "archetypes": {
+    "ruler": "Herrscher",
+    "creator": "Schöpfer",
+    "sage": "Weiser",
+    "innocent": "Unschuldiger",
+    "explorer": "Entdecker",
+    "rebel": "Rebell",
+    "hero": "Held",
+    "wizard": "Zauberer",
+    "jester": "Narr",
+    "everyman": "Jedermann",
+    "lover": "Liebender",
+    "caregiver": "Beschützer"
+  },
+
+  "elements": {
+    "fire": "Feuer",
+    "water": "Wasser",
+    "earth": "Erde",
+    "air": "Luft",
+    "sky": "Himmel"
+  }
+}

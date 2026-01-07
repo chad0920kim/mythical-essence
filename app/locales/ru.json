@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Откройте божественное внутри себя",
+  "app_description": "ИИ анализирует ваше лицо, чтобы найти вашего мифологического двойника",
+
+  "nav_home": "Главная",
+  "nav_about": "О нас",
+  "nav_gallery": "Галерея",
+
+  "upload_title": "Загрузите ваше фото",
+  "upload_subtitle": "Найдите божество, отражающее вашу сущность",
+  "upload_button": "Выбрать фото",
+  "upload_drag": "или перетащите сюда",
+  "upload_formats": "Поддерживаемые форматы: JPG, PNG, WebP (макс. 10МБ)",
+  "upload_privacy": "Загруженные изображения удаляются сразу после анализа",
+
+  "analyzing": "Анализ...",
+  "analyzing_message": "Ищем вашу сущность в царстве богов",
+
+  "result_title": "Ваша мифическая сущность",
+  "result_match": "Совпадение",
+  "result_culture": "Культура",
+  "result_element": "Элемент",
+  "result_domain": "Сфера",
+  "result_symbol": "Символ",
+  "result_archetype": "Архетип",
+  "result_analysis": "Анализ",
+  "result_share": "Поделиться результатом",
+  "result_retry": "Попробовать снова",
+  "result_other_matches": "Другие совпадения",
+
+  "share_twitter": "Поделиться в Twitter",
+  "share_facebook": "Поделиться в Facebook",
+  "share_copy": "Копировать ссылку",
+  "share_download": "Скачать изображение",
+
+  "error_no_face": "Лицо не обнаружено. Пожалуйста, попробуйте другое фото.",
+  "error_upload": "Ошибка загрузки. Пожалуйста, попробуйте снова.",
+  "error_generic": "Что-то пошло не так. Пожалуйста, попробуйте снова.",
+
+  "footer_privacy": "Политика конфиденциальности",
+  "footer_terms": "Условия использования",
+  "footer_contact": "Контакты",
+
+  "cultures": {
+    "greek": "Греческая",
+    "roman": "Римская",
+    "norse": "Скандинавская",
+    "egyptian": "Египетская",
+    "hindu": "Индуистская",
+    "chinese": "Китайская",
+    "japanese": "Японская",
+    "korean": "Корейская",
+    "celtic": "Кельтская",
+    "slavic": "Славянская",
+    "mesopotamian": "Месопотамская",
+    "arabic": "Арабская",
+    "aztec": "Ацтекская",
+    "thai": "Тайская",
+    "vietnamese": "Вьетнамская",
+    "indonesian": "Индонезийская",
+    "christian": "Христианская",
+    "buddhist": "Буддийская",
+    "islamic": "Исламская",
+    "confucian": "Конфуцианская",
+    "taoist": "Даосская",
+    "persian": "Персидская",
+    "african": "Африканская",
+    "polynesian": "Полинезийская",
+    "native_american": "Индейская",
+    "mayan": "Майя",
+    "arthurian": "Артуровская"
+  },
+
+  "archetypes": {
+    "ruler": "Правитель",
+    "creator": "Создатель",
+    "sage": "Мудрец",
+    "innocent": "Невинный",
+    "explorer": "Исследователь",
+    "rebel": "Бунтарь",
+    "hero": "Герой",
+    "wizard": "Волшебник",
+    "jester": "Шут",
+    "everyman": "Простой человек",
+    "lover": "Влюблённый",
+    "caregiver": "Заботливый"
+  },
+
+  "elements": {
+    "fire": "Огонь",
+    "water": "Вода",
+    "earth": "Земля",
+    "air": "Воздух",
+    "sky": "Небо"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Descubre lo divino dentro de ti",
+  "app_description": "La IA analiza tu rostro para encontrar tu contraparte mitológica",
+
+  "nav_home": "Inicio",
+  "nav_about": "Acerca de",
+  "nav_gallery": "Galería",
+
+  "upload_title": "Sube tu foto",
+  "upload_subtitle": "Encuentra la deidad que refleja tu esencia",
+  "upload_button": "Elegir foto",
+  "upload_drag": "o arrastra y suelta aquí",
+  "upload_formats": "Formatos soportados: JPG, PNG, WebP (máx. 10MB)",
+  "upload_privacy": "Las imágenes subidas se eliminan inmediatamente después del análisis",
+
+  "analyzing": "Analizando...",
+  "analyzing_message": "Buscando tu esencia en el reino de los dioses",
+
+  "result_title": "Tu esencia mítica",
+  "result_match": "Puntuación de coincidencia",
+  "result_culture": "Cultura",
+  "result_element": "Elemento",
+  "result_domain": "Dominio",
+  "result_symbol": "Símbolo",
+  "result_archetype": "Arquetipo",
+  "result_analysis": "Análisis",
+  "result_share": "Compartir resultado",
+  "result_retry": "Intentar de nuevo",
+  "result_other_matches": "Otras coincidencias",
+
+  "share_twitter": "Compartir en Twitter",
+  "share_facebook": "Compartir en Facebook",
+  "share_copy": "Copiar enlace",
+  "share_download": "Descargar imagen",
+
+  "error_no_face": "No se detectó ningún rostro. Por favor, intenta con otra foto.",
+  "error_upload": "Error de carga. Por favor, inténtalo de nuevo.",
+  "error_generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+
+  "footer_privacy": "Política de privacidad",
+  "footer_terms": "Términos de servicio",
+  "footer_contact": "Contacto",
+
+  "cultures": {
+    "greek": "Griego",
+    "roman": "Romano",
+    "norse": "Nórdico",
+    "egyptian": "Egipcio",
+    "hindu": "Hindú",
+    "chinese": "Chino",
+    "japanese": "Japonés",
+    "korean": "Coreano",
+    "celtic": "Celta",
+    "slavic": "Eslavo",
+    "mesopotamian": "Mesopotámico",
+    "arabic": "Árabe",
+    "aztec": "Azteca",
+    "thai": "Tailandés",
+    "vietnamese": "Vietnamita",
+    "indonesian": "Indonesio",
+    "christian": "Cristiano",
+    "buddhist": "Budista",
+    "islamic": "Islámico",
+    "confucian": "Confuciano",
+    "taoist": "Taoísta",
+    "persian": "Persa",
+    "african": "Africano",
+    "polynesian": "Polinesio",
+    "native_american": "Nativo americano",
+    "mayan": "Maya",
+    "arthurian": "Artúrico"
+  },
+
+  "archetypes": {
+    "ruler": "Gobernante",
+    "creator": "Creador",
+    "sage": "Sabio",
+    "innocent": "Inocente",
+    "explorer": "Explorador",
+    "rebel": "Rebelde",
+    "hero": "Héroe",
+    "wizard": "Mago",
+    "jester": "Bufón",
+    "everyman": "Hombre común",
+    "lover": "Amante",
+    "caregiver": "Cuidador"
+  },
+
+  "elements": {
+    "fire": "Fuego",
+    "water": "Agua",
+    "earth": "Tierra",
+    "air": "Aire",
+    "sky": "Cielo"
+  }
+}

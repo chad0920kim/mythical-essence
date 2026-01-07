@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Découvrez le divin en vous",
+  "app_description": "L'IA analyse votre visage pour trouver votre équivalent mythologique",
+
+  "nav_home": "Accueil",
+  "nav_about": "À propos",
+  "nav_gallery": "Galerie",
+
+  "upload_title": "Téléchargez votre photo",
+  "upload_subtitle": "Trouvez la divinité qui reflète votre essence",
+  "upload_button": "Choisir une photo",
+  "upload_drag": "ou glissez-déposez ici",
+  "upload_formats": "Formats supportés: JPG, PNG, WebP (max 10Mo)",
+  "upload_privacy": "Les images téléchargées sont supprimées immédiatement après l'analyse",
+
+  "analyzing": "Analyse en cours...",
+  "analyzing_message": "Recherche de votre essence dans le royaume des dieux",
+
+  "result_title": "Votre essence mythique",
+  "result_match": "Score de correspondance",
+  "result_culture": "Culture",
+  "result_element": "Élément",
+  "result_domain": "Domaine",
+  "result_symbol": "Symbole",
+  "result_archetype": "Archétype",
+  "result_analysis": "Analyse",
+  "result_share": "Partager le résultat",
+  "result_retry": "Réessayer",
+  "result_other_matches": "Autres correspondances",
+
+  "share_twitter": "Partager sur Twitter",
+  "share_facebook": "Partager sur Facebook",
+  "share_copy": "Copier le lien",
+  "share_download": "Télécharger l'image",
+
+  "error_no_face": "Aucun visage détecté. Veuillez essayer une autre photo.",
+  "error_upload": "Erreur de téléchargement. Veuillez réessayer.",
+  "error_generic": "Une erreur s'est produite. Veuillez réessayer.",
+
+  "footer_privacy": "Politique de confidentialité",
+  "footer_terms": "Conditions d'utilisation",
+  "footer_contact": "Contact",
+
+  "cultures": {
+    "greek": "Grec",
+    "roman": "Romain",
+    "norse": "Nordique",
+    "egyptian": "Égyptien",
+    "hindu": "Hindou",
+    "chinese": "Chinois",
+    "japanese": "Japonais",
+    "korean": "Coréen",
+    "celtic": "Celtique",
+    "slavic": "Slave",
+    "mesopotamian": "Mésopotamien",
+    "arabic": "Arabe",
+    "aztec": "Aztèque",
+    "thai": "Thaïlandais",
+    "vietnamese": "Vietnamien",
+    "indonesian": "Indonésien",
+    "christian": "Chrétien",
+    "buddhist": "Bouddhiste",
+    "islamic": "Islamique",
+    "confucian": "Confucéen",
+    "taoist": "Taoïste",
+    "persian": "Perse",
+    "african": "Africain",
+    "polynesian": "Polynésien",
+    "native_american": "Amérindien",
+    "mayan": "Maya",
+    "arthurian": "Arthurien"
+  },
+
+  "archetypes": {
+    "ruler": "Souverain",
+    "creator": "Créateur",
+    "sage": "Sage",
+    "innocent": "Innocent",
+    "explorer": "Explorateur",
+    "rebel": "Rebelle",
+    "hero": "Héros",
+    "wizard": "Magicien",
+    "jester": "Bouffon",
+    "everyman": "Homme ordinaire",
+    "lover": "Amoureux",
+    "caregiver": "Protecteur"
+  },
+
+  "elements": {
+    "fire": "Feu",
+    "water": "Eau",
+    "earth": "Terre",
+    "air": "Air",
+    "sky": "Ciel"
+  }
+}

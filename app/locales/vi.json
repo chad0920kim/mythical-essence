@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "Khám phá thần tính bên trong bạn",
+  "app_description": "AI phân tích khuôn mặt của bạn để tìm ra vị thần tương ứng trong thần thoại",
+
+  "nav_home": "Trang chủ",
+  "nav_about": "Giới thiệu",
+  "nav_gallery": "Bộ sưu tập",
+
+  "upload_title": "Tải ảnh của bạn lên",
+  "upload_subtitle": "Tìm vị thần phản ánh bản chất của bạn",
+  "upload_button": "Chọn ảnh",
+  "upload_drag": "hoặc kéo và thả vào đây",
+  "upload_formats": "Định dạng hỗ trợ: JPG, PNG, WebP (tối đa 10MB)",
+  "upload_privacy": "Ảnh tải lên sẽ bị xóa ngay sau khi phân tích",
+
+  "analyzing": "Đang phân tích...",
+  "analyzing_message": "Đang tìm kiếm bản chất của bạn trong vương quốc của các vị thần",
+
+  "result_title": "Bản chất thần thoại của bạn",
+  "result_match": "Điểm phù hợp",
+  "result_culture": "Văn hóa",
+  "result_element": "Nguyên tố",
+  "result_domain": "Lĩnh vực",
+  "result_symbol": "Biểu tượng",
+  "result_archetype": "Nguyên mẫu",
+  "result_analysis": "Phân tích",
+  "result_share": "Chia sẻ kết quả",
+  "result_retry": "Thử lại",
+  "result_other_matches": "Kết quả phù hợp khác",
+
+  "share_twitter": "Chia sẻ trên Twitter",
+  "share_facebook": "Chia sẻ trên Facebook",
+  "share_copy": "Sao chép liên kết",
+  "share_download": "Tải ảnh xuống",
+
+  "error_no_face": "Không phát hiện khuôn mặt. Vui lòng thử ảnh khác.",
+  "error_upload": "Lỗi tải lên. Vui lòng thử lại.",
+  "error_generic": "Đã xảy ra lỗi. Vui lòng thử lại.",
+
+  "footer_privacy": "Chính sách bảo mật",
+  "footer_terms": "Điều khoản dịch vụ",
+  "footer_contact": "Liên hệ",
+
+  "cultures": {
+    "greek": "Hy Lạp",
+    "roman": "La Mã",
+    "norse": "Bắc Âu",
+    "egyptian": "Ai Cập",
+    "hindu": "Hindu",
+    "chinese": "Trung Quốc",
+    "japanese": "Nhật Bản",
+    "korean": "Hàn Quốc",
+    "celtic": "Celtic",
+    "slavic": "Slav",
+    "mesopotamian": "Lưỡng Hà",
+    "arabic": "Ả Rập",
+    "aztec": "Aztec",
+    "thai": "Thái",
+    "vietnamese": "Việt Nam",
+    "indonesian": "Indonesia",
+    "christian": "Cơ đốc",
+    "buddhist": "Phật giáo",
+    "islamic": "Hồi giáo",
+    "confucian": "Khổng giáo",
+    "taoist": "Đạo giáo",
+    "persian": "Ba Tư",
+    "african": "Châu Phi",
+    "polynesian": "Polynesia",
+    "native_american": "Bản địa châu Mỹ",
+    "mayan": "Maya",
+    "arthurian": "Arthur"
+  },
+
+  "archetypes": {
+    "ruler": "Người cai trị",
+    "creator": "Người sáng tạo",
+    "sage": "Hiền triết",
+    "innocent": "Người ngây thơ",
+    "explorer": "Nhà thám hiểm",
+    "rebel": "Kẻ nổi loạn",
+    "hero": "Anh hùng",
+    "wizard": "Phù thủy",
+    "jester": "Hề",
+    "everyman": "Người bình thường",
+    "lover": "Người yêu",
+    "caregiver": "Người chăm sóc"
+  },
+
+  "elements": {
+    "fire": "Lửa",
+    "water": "Nước",
+    "earth": "Đất",
+    "air": "Không khí",
+    "sky": "Bầu trời"
+  }
+}

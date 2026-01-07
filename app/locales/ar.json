@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "اكتشف الإلهي في داخلك",
+  "app_description": "يحلل الذكاء الاصطناعي وجهك للعثور على نظيرك الأسطوري",
+
+  "nav_home": "الرئيسية",
+  "nav_about": "حول",
+  "nav_gallery": "المعرض",
+
+  "upload_title": "ارفع صورتك",
+  "upload_subtitle": "اعثر على الإله الذي يعكس جوهرك",
+  "upload_button": "اختر صورة",
+  "upload_drag": "أو اسحب وأفلت هنا",
+  "upload_formats": "الصيغ المدعومة: JPG، PNG، WebP (الحد الأقصى 10 ميجابايت)",
+  "upload_privacy": "يتم حذف الصور المرفوعة فوراً بعد التحليل",
+
+  "analyzing": "جارٍ التحليل...",
+  "analyzing_message": "نبحث عن جوهرك في عالم الآلهة",
+
+  "result_title": "جوهرك الأسطوري",
+  "result_match": "نسبة التطابق",
+  "result_culture": "الثقافة",
+  "result_element": "العنصر",
+  "result_domain": "المجال",
+  "result_symbol": "الرمز",
+  "result_archetype": "النموذج الأصلي",
+  "result_analysis": "التحليل",
+  "result_share": "شارك النتيجة",
+  "result_retry": "حاول مرة أخرى",
+  "result_other_matches": "تطابقات أخرى",
+
+  "share_twitter": "شارك على تويتر",
+  "share_facebook": "شارك على فيسبوك",
+  "share_copy": "نسخ الرابط",
+  "share_download": "تحميل الصورة",
+
+  "error_no_face": "لم يتم الكشف عن وجه. يرجى تجربة صورة أخرى.",
+  "error_upload": "خطأ في الرفع. يرجى المحاولة مرة أخرى.",
+  "error_generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+
+  "footer_privacy": "سياسة الخصوصية",
+  "footer_terms": "شروط الخدمة",
+  "footer_contact": "اتصل بنا",
+
+  "cultures": {
+    "greek": "يوناني",
+    "roman": "روماني",
+    "norse": "إسكندنافي",
+    "egyptian": "مصري",
+    "hindu": "هندوسي",
+    "chinese": "صيني",
+    "japanese": "ياباني",
+    "korean": "كوري",
+    "celtic": "كلتي",
+    "slavic": "سلافي",
+    "mesopotamian": "بلاد الرافدين",
+    "arabic": "عربي",
+    "aztec": "أزتيكي",
+    "thai": "تايلاندي",
+    "vietnamese": "فيتنامي",
+    "indonesian": "إندونيسي",
+    "christian": "مسيحي",
+    "buddhist": "بوذي",
+    "islamic": "إسلامي",
+    "confucian": "كونفوشيوسي",
+    "taoist": "طاوي",
+    "persian": "فارسي",
+    "african": "أفريقي",
+    "polynesian": "بولينيزي",
+    "native_american": "أمريكي أصلي",
+    "mayan": "مايا",
+    "arthurian": "آرثري"
+  },
+
+  "archetypes": {
+    "ruler": "الحاكم",
+    "creator": "الخالق",
+    "sage": "الحكيم",
+    "innocent": "البريء",
+    "explorer": "المستكشف",
+    "rebel": "المتمرد",
+    "hero": "البطل",
+    "wizard": "الساحر",
+    "jester": "المهرج",
+    "everyman": "الرجل العادي",
+    "lover": "العاشق",
+    "caregiver": "الراعي"
+  },
+
+  "elements": {
+    "fire": "النار",
+    "water": "الماء",
+    "earth": "الأرض",
+    "air": "الهواء",
+    "sky": "السماء"
+  }
+}

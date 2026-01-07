@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "İçinizdeki tanrısallığı keşfedin",
+  "app_description": "Yapay zeka yüzünüzü analiz ederek mitolojik eşinizi bulur",
+
+  "nav_home": "Ana Sayfa",
+  "nav_about": "Hakkında",
+  "nav_gallery": "Galeri",
+
+  "upload_title": "Fotoğrafınızı yükleyin",
+  "upload_subtitle": "Özünüzü yansıtan tanrıyı bulun",
+  "upload_button": "Fotoğraf seç",
+  "upload_drag": "veya buraya sürükleyip bırakın",
+  "upload_formats": "Desteklenen formatlar: JPG, PNG, WebP (maks. 10MB)",
+  "upload_privacy": "Yüklenen görüntüler analiz sonrası hemen silinir",
+
+  "analyzing": "Analiz ediliyor...",
+  "analyzing_message": "Tanrılar aleminde özünüz aranıyor",
+
+  "result_title": "Mitolojik özünüz",
+  "result_match": "Eşleşme puanı",
+  "result_culture": "Kültür",
+  "result_element": "Element",
+  "result_domain": "Alan",
+  "result_symbol": "Sembol",
+  "result_archetype": "Arketip",
+  "result_analysis": "Analiz",
+  "result_share": "Sonucu paylaş",
+  "result_retry": "Tekrar dene",
+  "result_other_matches": "Diğer eşleşmeler",
+
+  "share_twitter": "Twitter'da paylaş",
+  "share_facebook": "Facebook'ta paylaş",
+  "share_copy": "Bağlantıyı kopyala",
+  "share_download": "Görüntüyü indir",
+
+  "error_no_face": "Yüz algılanamadı. Lütfen başka bir fotoğraf deneyin.",
+  "error_upload": "Yükleme hatası. Lütfen tekrar deneyin.",
+  "error_generic": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.",
+
+  "footer_privacy": "Gizlilik politikası",
+  "footer_terms": "Kullanım şartları",
+  "footer_contact": "İletişim",
+
+  "cultures": {
+    "greek": "Yunan",
+    "roman": "Roma",
+    "norse": "İskandinav",
+    "egyptian": "Mısır",
+    "hindu": "Hindu",
+    "chinese": "Çin",
+    "japanese": "Japon",
+    "korean": "Kore",
+    "celtic": "Kelt",
+    "slavic": "Slav",
+    "mesopotamian": "Mezopotamya",
+    "arabic": "Arap",
+    "aztec": "Aztek",
+    "thai": "Tayland",
+    "vietnamese": "Vietnam",
+    "indonesian": "Endonezya",
+    "christian": "Hristiyan",
+    "buddhist": "Budist",
+    "islamic": "İslam",
+    "confucian": "Konfüçyüs",
+    "taoist": "Taocu",
+    "persian": "Pers",
+    "african": "Afrika",
+    "polynesian": "Polinezya",
+    "native_american": "Yerli Amerikan",
+    "mayan": "Maya",
+    "arthurian": "Arthur"
+  },
+
+  "archetypes": {
+    "ruler": "Hükümdar",
+    "creator": "Yaratıcı",
+    "sage": "Bilge",
+    "innocent": "Masum",
+    "explorer": "Kaşif",
+    "rebel": "Asi",
+    "hero": "Kahraman",
+    "wizard": "Büyücü",
+    "jester": "Soytarı",
+    "everyman": "Sıradan insan",
+    "lover": "Aşık",
+    "caregiver": "Bakıcı"
+  },
+
+  "elements": {
+    "fire": "Ateş",
+    "water": "Su",
+    "earth": "Toprak",
+    "air": "Hava",
+    "sky": "Gökyüzü"
+  }
+}

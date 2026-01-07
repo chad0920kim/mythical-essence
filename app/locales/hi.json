@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "अपने भीतर के दिव्य को खोजें",
+  "app_description": "AI आपके चेहरे का विश्लेषण करके आपके पौराणिक समकक्ष को खोजता है",
+
+  "nav_home": "होम",
+  "nav_about": "परिचय",
+  "nav_gallery": "गैलरी",
+
+  "upload_title": "अपनी फोटो अपलोड करें",
+  "upload_subtitle": "वह देवता खोजें जो आपके सार को दर्शाता है",
+  "upload_button": "फोटो चुनें",
+  "upload_drag": "या यहाँ ड्रैग और ड्रॉप करें",
+  "upload_formats": "समर्थित प्रारूप: JPG, PNG, WebP (अधिकतम 10MB)",
+  "upload_privacy": "अपलोड की गई छवियाँ विश्लेषण के तुरंत बाद हटा दी जाती हैं",
+
+  "analyzing": "विश्लेषण हो रहा है...",
+  "analyzing_message": "देवताओं के लोक में आपके सार की खोज हो रही है",
+
+  "result_title": "आपका पौराणिक सार",
+  "result_match": "मिलान स्कोर",
+  "result_culture": "संस्कृति",
+  "result_element": "तत्व",
+  "result_domain": "क्षेत्र",
+  "result_symbol": "प्रतीक",
+  "result_archetype": "मूल प्रकार",
+  "result_analysis": "विश्लेषण",
+  "result_share": "परिणाम साझा करें",
+  "result_retry": "पुनः प्रयास करें",
+  "result_other_matches": "अन्य मिलान",
+
+  "share_twitter": "ट्विटर पर साझा करें",
+  "share_facebook": "फेसबुक पर साझा करें",
+  "share_copy": "लिंक कॉपी करें",
+  "share_download": "छवि डाउनलोड करें",
+
+  "error_no_face": "चेहरा नहीं मिला। कृपया दूसरी फोटो आज़माएं।",
+  "error_upload": "अपलोड त्रुटि। कृपया पुनः प्रयास करें।",
+  "error_generic": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+
+  "footer_privacy": "गोपनीयता नीति",
+  "footer_terms": "सेवा की शर्तें",
+  "footer_contact": "संपर्क करें",
+
+  "cultures": {
+    "greek": "यूनानी",
+    "roman": "रोमन",
+    "norse": "नॉर्स",
+    "egyptian": "मिस्री",
+    "hindu": "हिंदू",
+    "chinese": "चीनी",
+    "japanese": "जापानी",
+    "korean": "कोरियाई",
+    "celtic": "केल्टिक",
+    "slavic": "स्लाव",
+    "mesopotamian": "मेसोपोटामियाई",
+    "arabic": "अरबी",
+    "aztec": "एज़्टेक",
+    "thai": "थाई",
+    "vietnamese": "वियतनामी",
+    "indonesian": "इंडोनेशियाई",
+    "christian": "ईसाई",
+    "buddhist": "बौद्ध",
+    "islamic": "इस्लामी",
+    "confucian": "कन्फ्यूशियस",
+    "taoist": "ताओवादी",
+    "persian": "फारसी",
+    "african": "अफ्रीकी",
+    "polynesian": "पोलिनेशियाई",
+    "native_american": "मूल अमेरिकी",
+    "mayan": "माया",
+    "arthurian": "आर्थरियन"
+  },
+
+  "archetypes": {
+    "ruler": "शासक",
+    "creator": "रचनाकार",
+    "sage": "ऋषि",
+    "innocent": "निर्दोष",
+    "explorer": "खोजकर्ता",
+    "rebel": "विद्रोही",
+    "hero": "नायक",
+    "wizard": "जादूगर",
+    "jester": "विदूषक",
+    "everyman": "आम आदमी",
+    "lover": "प्रेमी",
+    "caregiver": "देखभालकर्ता"
+  },
+
+  "elements": {
+    "fire": "अग्नि",
+    "water": "जल",
+    "earth": "पृथ्वी",
+    "air": "वायु",
+    "sky": "आकाश"
+  }
+}

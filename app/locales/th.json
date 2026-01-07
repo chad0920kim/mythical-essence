@@ -1,0 +1,97 @@
+{
+  "app_name": "Mythical Essence",
+  "app_tagline": "ค้นพบความศักดิ์สิทธิ์ในตัวคุณ",
+  "app_description": "AI วิเคราะห์ใบหน้าของคุณเพื่อค้นหาคู่เทพในตำนาน",
+
+  "nav_home": "หน้าแรก",
+  "nav_about": "เกี่ยวกับ",
+  "nav_gallery": "แกลเลอรี",
+
+  "upload_title": "อัปโหลดรูปภาพของคุณ",
+  "upload_subtitle": "ค้นหาเทพที่สะท้อนแก่นแท้ของคุณ",
+  "upload_button": "เลือกรูปภาพ",
+  "upload_drag": "หรือลากและวางที่นี่",
+  "upload_formats": "รูปแบบที่รองรับ: JPG, PNG, WebP (สูงสุด 10MB)",
+  "upload_privacy": "รูปภาพที่อัปโหลดจะถูกลบทันทีหลังการวิเคราะห์",
+
+  "analyzing": "กำลังวิเคราะห์...",
+  "analyzing_message": "กำลังค้นหาแก่นแท้ของคุณในอาณาจักรของเทพเจ้า",
+
+  "result_title": "แก่นแท้ในตำนานของคุณ",
+  "result_match": "คะแนนความตรงกัน",
+  "result_culture": "วัฒนธรรม",
+  "result_element": "ธาตุ",
+  "result_domain": "อาณาจักร",
+  "result_symbol": "สัญลักษณ์",
+  "result_archetype": "ต้นแบบ",
+  "result_analysis": "การวิเคราะห์",
+  "result_share": "แชร์ผลลัพธ์",
+  "result_retry": "ลองอีกครั้ง",
+  "result_other_matches": "ความตรงกันอื่นๆ",
+
+  "share_twitter": "แชร์บน Twitter",
+  "share_facebook": "แชร์บน Facebook",
+  "share_copy": "คัดลอกลิงก์",
+  "share_download": "ดาวน์โหลดรูปภาพ",
+
+  "error_no_face": "ไม่พบใบหน้า กรุณาลองรูปภาพอื่น",
+  "error_upload": "เกิดข้อผิดพลาดในการอัปโหลด กรุณาลองอีกครั้ง",
+  "error_generic": "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง",
+
+  "footer_privacy": "นโยบายความเป็นส่วนตัว",
+  "footer_terms": "ข้อกำหนดการใช้บริการ",
+  "footer_contact": "ติดต่อ",
+
+  "cultures": {
+    "greek": "กรีก",
+    "roman": "โรมัน",
+    "norse": "นอร์ส",
+    "egyptian": "อียิปต์",
+    "hindu": "ฮินดู",
+    "chinese": "จีน",
+    "japanese": "ญี่ปุ่น",
+    "korean": "เกาหลี",
+    "celtic": "เคลติก",
+    "slavic": "สลาฟ",
+    "mesopotamian": "เมโสโปเตเมีย",
+    "arabic": "อาหรับ",
+    "aztec": "แอซเท็ก",
+    "thai": "ไทย",
+    "vietnamese": "เวียดนาม",
+    "indonesian": "อินโดนีเซีย",
+    "christian": "คริสต์",
+    "buddhist": "พุทธ",
+    "islamic": "อิสลาม",
+    "confucian": "ขงจื๊อ",
+    "taoist": "เต๋า",
+    "persian": "เปอร์เซีย",
+    "african": "แอฟริกา",
+    "polynesian": "โพลินีเซีย",
+    "native_american": "อเมริกันพื้นเมือง",
+    "mayan": "มายา",
+    "arthurian": "อาเธอร์"
+  },
+
+  "archetypes": {
+    "ruler": "ผู้ปกครอง",
+    "creator": "ผู้สร้างสรรค์",
+    "sage": "ปราชญ์",
+    "innocent": "ผู้บริสุทธิ์",
+    "explorer": "นักสำรวจ",
+    "rebel": "กบฏ",
+    "hero": "วีรบุรุษ",
+    "wizard": "พ่อมด",
+    "jester": "ตัวตลก",
+    "everyman": "คนธรรมดา",
+    "lover": "คนรัก",
+    "caregiver": "ผู้ดูแล"
+  },
+
+  "elements": {
+    "fire": "ไฟ",
+    "water": "น้ำ",
+    "earth": "ดิน",
+    "air": "ลม",
+    "sky": "ท้องฟ้า"
+  }
+}
