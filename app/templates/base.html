@@ -165,15 +165,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="lang-menu" class="absolute right-0 top-full w-40 card-mythical hidden mt-1 z-50">
-                        <div class="py-1">
-                            {% for code, info in languages.items() %}
-                            <a href="/set-language/{{ code }}"
-                               class="block px-4 py-2 hover:bg-white/10 hover:text-gold transition-colors {% if loop.first %}rounded-t-lg{% endif %} {% if loop.last %}rounded-b-lg{% endif %}">
-                                {{ info.name }}
-                            </a>
-                            {% endfor %}
-                        </div>
+                    <div id="lang-menu" class="hidden absolute right-0 top-full mt-2 w-48 rounded-lg shadow-xl border border-gold/30 overflow-hidden" style="background: #1a1a2e; z-index: 9999;">
+                        {% for code, info in languages.items() %}
+                        <a href="/set-language/{{ code }}"
+                           class="block px-4 py-3 text-gray-200 hover:bg-gold/20 hover:text-gold transition-colors border-b border-white/5 last:border-b-0"
+                           style="cursor: pointer;">
+                            {{ info.name }}
+                        </a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
