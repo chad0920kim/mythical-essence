@@ -23,6 +23,17 @@ from app.services.face_analysis import get_face_analyzer
 from app.services.god_matcher import match_face_to_god, get_primary_match
 from app.services.face_swap import get_face_swapper, convert_to_base64
 from app.models.gods import GODS_DATABASE, Culture
+from app.models.descriptions_registry import (
+    ALL_CHARACTER_DESCRIPTIONS,
+    CharacterCategory,
+    get_character_description,
+    get_character_category,
+    get_characters_by_category,
+    get_all_categories,
+    get_category_name,
+    get_category_counts,
+    get_total_character_count,
+)
 
 
 # Initialize FastAPI app
@@ -254,6 +265,105 @@ async def gallery(request: Request, culture: Optional[str] = None):
     context["selected_culture"] = culture
 
     return templates.TemplateResponse("gallery.html", context)
+
+
+# ============================================
+# Character Browser Routes (with descriptions)
+# ============================================
+@app.get("/characters", response_class=HTMLResponse)
+async def character_browser(request: Request, category: Optional[str] = None):
+    """Display character browser with all characters organized by category."""
+    context = get_base_context(request)
+    lang = context["lang"]
+
+    # Get categories with their display names
+    categories_data = []
+    for cat in get_all_categories():
+        categories_data.append({
+            "value": cat.value,
+            "name_en": get_category_name(cat, "en"),
+            "name_ko": get_category_name(cat, "ko"),
+        })
+
+    # Get characters for selected category or all
+    if category:
+        try:
+            cat_enum = CharacterCategory(category)
+            characters = get_characters_by_category(cat_enum)
+        except ValueError:
+            characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+    else:
+        characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+
+    # Sort characters by name
+    characters.sort(key=lambda c: c.name_ko if lang == "ko" else c.name_en)
+
+    context["characters"] = characters
+    context["categories"] = categories_data
+    context["selected_category"] = category
+    context["category_counts"] = {cat.value: count for cat, count in get_category_counts().items()}
+    context["total_count"] = get_total_character_count()
+
+    return templates.TemplateResponse("characters.html", context)
+
+
+@app.get("/character/{char_id}", response_class=HTMLResponse)
+async def character_detail(request: Request, char_id: str):
+    """Display detailed character information."""
+    character = get_character_description(char_id)
+    if not character:
+        raise HTTPException(status_code=404, detail="Character not found")
+
+    context = get_base_context(request)
+    context["character"] = character
+
+    # Get category info
+    category = get_character_category(char_id)
+    if category:
+        context["category"] = {
+            "value": category.value,
+            "name_en": get_category_name(category, "en"),
+            "name_ko": get_category_name(category, "ko"),
+        }
+
+    # Get related characters if any
+    if character.related_characters:
+        related = []
+        for rel_id in character.related_characters[:5]:  # Limit to 5
+            rel_char = get_character_description(rel_id)
+            if rel_char:
+                related.append(rel_char)
+        context["related_characters"] = related
+
+    return templates.TemplateResponse("character_detail.html", context)
+
+
+@app.get("/api/characters")
+async def api_characters(category: Optional[str] = None, limit: int = 50):
+    """API endpoint to get characters list with descriptions."""
+    if category:
+        try:
+            cat_enum = CharacterCategory(category)
+            characters = get_characters_by_category(cat_enum)
+        except ValueError:
+            characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+    else:
+        characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+
+    return {
+        "total": len(characters),
+        "characters": [
+            {
+                "id": c.id,
+                "name_en": c.name_en,
+                "name_ko": c.name_ko,
+                "tagline_en": c.tagline_en,
+                "tagline_ko": c.tagline_ko,
+                "category": get_character_category(c.id).value if get_character_category(c.id) else None,
+            }
+            for c in characters[:limit]
+        ]
+    }
 
 
 @app.get("/api/gods")

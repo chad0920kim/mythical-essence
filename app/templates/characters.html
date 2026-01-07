@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.nav_characters if t.nav_characters else "Character Guide" }} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <h1 class="font-mythical text-4xl text-gold mb-4">
+            {% if lang == "ko" %}
+            신화 속 캐릭터 도감
+            {% else %}
+            Mythical Character Guide
+            {% endif %}
+        </h1>
+        <p class="text-gray-400 text-lg">
+            {% if lang == "ko" %}
+            총 {{ total_count }}명의 신화적 인물들을 만나보세요
+            {% else %}
+            Explore {{ total_count }} mythological figures from around the world
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="mb-12">
+        <div class="flex flex-wrap justify-center gap-2">
+            <a href="/characters"
+               class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black font-semibold' if not selected_category else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
+                {% if lang == "ko" %}전체{% else %}All{% endif %}
+                <span class="text-xs ml-1 opacity-70">({{ total_count }})</span>
+            </a>
+            {% for cat in categories %}
+            <a href="/characters?category={{ cat.value }}"
+               class="px-4 py-2 rounded-full transition-colors {{ 'bg-gold text-black font-semibold' if selected_category == cat.value else 'border border-gold/50 text-gold hover:bg-gold/10' }}">
+                {{ cat.name_ko if lang == "ko" else cat.name_en }}
+                <span class="text-xs ml-1 opacity-70">({{ category_counts[cat.value] }})</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Characters Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for char in characters %}
+        <a href="/character/{{ char.id }}" class="card-mythical p-5 hover:glow-gold transition-all group block">
+            <!-- Character Icon/Avatar -->
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center text-2xl font-mythical text-gold border border-gold/30">
+                {{ (char.name_ko[0] if lang == "ko" else char.name_en[0]) | upper }}
+            </div>
+
+            <!-- Names -->
+            <h3 class="font-mythical text-lg text-white group-hover:text-gold transition-colors text-center mb-1">
+                {{ char.name_ko if lang == "ko" else char.name_en }}
+            </h3>
+            <p class="text-xs text-gray-500 text-center mb-3">
+                {{ char.name_en if lang == "ko" else char.name_ko }}
+            </p>
+
+            <!-- Tagline -->
+            <p class="text-sm text-gray-400 text-center line-clamp-2">
+                {{ char.tagline_ko if lang == "ko" else char.tagline_en }}
+            </p>
+
+            <!-- Traits Preview -->
+            <div class="mt-4 flex flex-wrap justify-center gap-1">
+                {% set traits = char.traits_ko if lang == "ko" else char.traits_en %}
+                {% for trait in traits[:3] %}
+                <span class="text-xs px-2 py-1 rounded-full bg-white/5 text-gray-400">
+                    {{ trait }}
+                </span>
+                {% endfor %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    {% if not characters %}
+    <div class="text-center text-gray-400 py-16">
+        <div class="text-5xl mb-4">📚</div>
+        {% if lang == "ko" %}
+        해당 카테고리에 캐릭터가 없습니다.
+        {% else %}
+        No characters found in this category.
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Back to Home -->
+    <div class="text-center mt-12">
+        <a href="/" class="btn-mythical inline-block">
+            {% if lang == "ko" %}
+            ✨ 나의 신화 찾기
+            {% else %}
+            ✨ Find My Match
+            {% endif %}
+        </a>
+    </div>
+</div>
+
+<style>
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}{{ character.name_ko if lang == "ko" else character.name_en }} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="/characters{% if category %}?category={{ category.value }}{% endif %}"
+               class="text-gray-400 hover:text-gold transition-colors flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                {% if lang == "ko" %}캐릭터 목록으로{% else %}Back to Characters{% endif %}
+            </a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card-mythical p-8">
+            <!-- Header Section -->
+            <div class="text-center mb-10">
+                <!-- Character Avatar -->
+                <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center text-4xl font-mythical text-gold border-2 border-gold/50 shadow-lg">
+                    {{ (character.name_ko[0] if lang == "ko" else character.name_en[0]) | upper }}
+                </div>
+
+                <!-- Names -->
+                <h1 class="font-mythical text-4xl text-gold mb-2">
+                    {{ character.name_ko if lang == "ko" else character.name_en }}
+                </h1>
+                <p class="text-xl text-gray-400 mb-4">
+                    {{ character.name_en if lang == "ko" else character.name_ko }}
+                </p>
+
+                <!-- Category Badge -->
+                {% if category %}
+                <span class="inline-block px-4 py-1 rounded-full bg-gold/10 text-gold text-sm border border-gold/30">
+                    {{ category.name_ko if lang == "ko" else category.name_en }}
+                </span>
+                {% endif %}
+
+                <!-- Era if available -->
+                {% if character.era %}
+                <p class="text-gray-500 text-sm mt-2">{{ character.era }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Tagline -->
+            <div class="text-center mb-10">
+                <p class="text-xl text-gray-300 italic border-l-4 border-gold pl-4 text-left max-w-2xl mx-auto">
+                    "{{ character.tagline_ko if lang == "ko" else character.tagline_en }}"
+                </p>
+            </div>
+
+            <!-- Personality Traits -->
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}성격 특성{% else %}Personality Traits{% endif %}
+                </h2>
+                <div class="flex flex-wrap gap-3">
+                    {% set traits = character.traits_ko if lang == "ko" else character.traits_en %}
+                    {% for trait in traits %}
+                    <span class="px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 text-gold border border-gold/30">
+                        {{ trait }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}소개{% else %}About{% endif %}
+                </h2>
+                <div class="prose prose-invert max-w-none">
+                    {% set description = character.description_ko if lang == "ko" else character.description_en %}
+                    {% for paragraph in description.split('\n\n') %}
+                    <p class="text-gray-300 leading-relaxed mb-4">{{ paragraph }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Famous Story -->
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}유명한 이야기{% else %}Famous Story{% endif %}
+                </h2>
+                <div class="card-mythical p-6 bg-gradient-to-br from-white/5 to-transparent">
+                    <p class="text-gray-300 leading-relaxed">
+                        {{ character.story_ko if lang == "ko" else character.story_en }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Match Message (What it means if you match) -->
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}당신과 매칭된다면{% else %}If You Match{% endif %}
+                </h2>
+                <div class="card-mythical p-6 border-gold/40 bg-gradient-to-br from-gold/10 to-transparent">
+                    <p class="text-gray-200 leading-relaxed">
+                        {{ character.match_message_ko if lang == "ko" else character.match_message_en }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Aliases if available -->
+            {% if character.aliases %}
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}다른 이름{% else %}Also Known As{% endif %}
+                </h2>
+                <div class="flex flex-wrap gap-2">
+                    {% for alias in character.aliases %}
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-gray-400 text-sm">
+                        {{ alias }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Related Characters -->
+            {% if related_characters %}
+            <div class="mb-10">
+                <h2 class="font-mythical text-xl text-gold mb-4 flex items-center gap-2">
+                    <span class="text-2xl">✦</span>
+                    {% if lang == "ko" %}관련 인물{% else %}Related Characters{% endif %}
+                </h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                    {% for rel in related_characters %}
+                    <a href="/character/{{ rel.id }}" class="card-mythical p-4 text-center hover:glow-gold transition-all group">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gold/10 flex items-center justify-center text-lg font-mythical text-gold border border-gold/20">
+                            {{ (rel.name_ko[0] if lang == "ko" else rel.name_en[0]) | upper }}
+                        </div>
+                        <p class="text-sm text-gray-300 group-hover:text-gold transition-colors truncate">
+                            {{ rel.name_ko if lang == "ko" else rel.name_en }}
+                        </p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <a href="/" class="btn-mythical">
+                {% if lang == "ko" %}
+                ✨ 나와 닮은 신화 찾기
+                {% else %}
+                ✨ Find My Match
+                {% endif %}
+            </a>
+            <a href="/characters" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                {% if lang == "ko" %}
+                📚 다른 캐릭터 보기
+                {% else %}
+                📚 Browse All Characters
+                {% endif %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
