@@ -159,19 +159,21 @@
 
                 <!-- Language Selector -->
                 <div class="relative group">
-                    <button class="flex items-center gap-1 text-sm uppercase tracking-wide">
+                    <button class="flex items-center gap-1 text-sm uppercase tracking-wide py-2">
                         {{ lang }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div class="absolute right-0 mt-2 w-40 card-mythical opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                        {% for code, info in languages.items() %}
-                        <a href="/set-language/{{ code }}"
-                           class="block px-4 py-2 hover:bg-white/10 first:rounded-t-lg last:rounded-b-lg">
-                            {{ info.name }}
-                        </a>
-                        {% endfor %}
+                    <div class="absolute right-0 top-full w-40 card-mythical opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pt-1">
+                        <div class="py-1">
+                            {% for code, info in languages.items() %}
+                            <a href="/set-language/{{ code }}"
+                               class="block px-4 py-2 hover:bg-white/10 first:rounded-t-lg last:rounded-b-lg">
+                                {{ info.name }}
+                            </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
