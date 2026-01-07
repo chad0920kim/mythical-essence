@@ -246,6 +246,27 @@ async def god_detail(request: Request, god_id: str):
     return templates.TemplateResponse("god_detail.html", context)
 
 
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy_policy(request: Request):
+    """Display privacy policy page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("privacy.html", context)
+
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms_of_service(request: Request):
+    """Display terms of service page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("terms.html", context)
+
+
+@app.get("/contact", response_class=HTMLResponse)
+async def contact(request: Request):
+    """Display contact form page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("contact.html", context)
+
+
 @app.get("/gallery", response_class=HTMLResponse)
 async def gallery(request: Request, culture: Optional[str] = None):
     """Display gallery of all gods."""

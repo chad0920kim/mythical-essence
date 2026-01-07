@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}{% if lang == "ko" %}이용약관{% else %}Terms of Service{% endif %} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="card-mythical p-8">
+            <h1 class="font-mythical text-3xl text-gold mb-8 text-center">
+                {% if lang == "ko" %}이용약관{% else %}Terms of Service{% endif %}
+            </h1>
+
+            {% if lang == "ko" %}
+            <div class="prose prose-invert max-w-none space-y-6 text-gray-300">
+                <p class="text-sm text-gray-400">시행일: 2026년 1월 1일</p>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제1조 (목적)</h2>
+                    <p>이 약관은 Mythical Essence(이하 "서비스")가 제공하는 얼굴 분석 및 신화 캐릭터 매칭 서비스의 이용조건 및 절차, 이용자와 서비스의 권리·의무 및 책임사항 등을 규정함을 목적으로 합니다.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제2조 (정의)</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>"서비스"란 이용자가 얼굴 사진을 업로드하여 신화 속 캐릭터와 매칭 결과를 제공받는 웹 서비스를 말합니다.</li>
+                        <li>"이용자"란 본 약관에 따라 서비스가 제공하는 서비스를 이용하는 자를 말합니다.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제3조 (약관의 효력 및 변경)</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>본 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다.</li>
+                        <li>서비스는 필요한 경우 약관을 변경할 수 있으며, 변경된 약관은 공지사항을 통해 공지합니다.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제4조 (서비스의 제공)</h2>
+                    <p>서비스는 다음과 같은 기능을 제공합니다:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>얼굴 이미지 분석을 통한 신화 캐릭터 매칭</li>
+                        <li>신화 캐릭터 정보 열람 (캐릭터 도감)</li>
+                        <li>매칭 결과 공유 기능</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제5조 (이용자의 의무)</h2>
+                    <p>이용자는 다음 행위를 하여서는 안 됩니다:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>타인의 얼굴 사진을 무단으로 사용하는 행위</li>
+                        <li>서비스의 운영을 고의로 방해하는 행위</li>
+                        <li>서비스를 이용하여 법령 또는 공서양속에 반하는 행위</li>
+                        <li>서비스를 이용하여 얻은 정보를 서비스의 사전 승낙 없이 상업적으로 이용하는 행위</li>
+                        <li>기타 불법적이거나 부당한 행위</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제6조 (서비스의 중단)</h2>
+                    <p>서비스는 다음의 경우 서비스 제공을 일시적으로 중단할 수 있습니다:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>서비스 설비의 보수 등 공사로 인한 부득이한 경우</li>
+                        <li>전기통신사업법에 규정된 기간통신사업자가 전기통신 서비스를 중지한 경우</li>
+                        <li>기타 불가항력적 사유가 있는 경우</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제7조 (면책조항)</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>서비스는 무료로 제공되며, 서비스 이용과 관련하여 이용자에게 발생한 어떠한 손해에 대해서도 책임을 지지 않습니다.</li>
+                        <li>얼굴 분석 결과는 AI 알고리즘에 의한 것으로 오락 목적으로만 제공되며, 정확성을 보장하지 않습니다.</li>
+                        <li>이용자가 업로드한 이미지에 대한 저작권 및 초상권 문제는 이용자 본인에게 책임이 있습니다.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제8조 (저작권)</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>서비스가 제공하는 콘텐츠(캐릭터 설명, 이미지, 디자인 등)에 대한 저작권은 서비스에 귀속됩니다.</li>
+                        <li>이용자가 서비스를 이용하여 얻은 결과물은 개인적인 용도로만 사용할 수 있습니다.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제9조 (분쟁해결)</h2>
+                    <p>서비스 이용으로 발생한 분쟁에 대해 소송이 제기되는 경우 대한민국 법을 준거법으로 합니다.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제10조 (문의)</h2>
+                    <p>서비스 이용에 관한 문의는 아래 연락처로 해주시기 바랍니다.</p>
+                    <div class="bg-white/5 p-4 rounded-lg mt-4">
+                        <p>이메일: kyh0920@gmail.com</p>
+                    </div>
+                </section>
+
+                <section class="mt-8 pt-6 border-t border-white/10">
+                    <p class="text-sm text-gray-400">부칙: 이 약관은 2026년 1월 1일부터 시행합니다.</p>
+                </section>
+            </div>
+            {% else %}
+            <div class="prose prose-invert max-w-none space-y-6 text-gray-300">
+                <p class="text-sm text-gray-400">Effective Date: January 1, 2026</p>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">1. Purpose</h2>
+                    <p>These Terms of Service govern your use of Mythical Essence ("Service"), a face analysis and mythological character matching web service.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">2. Service Description</h2>
+                    <p>The Service provides:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Face image analysis and mythological character matching</li>
+                        <li>Character information browsing (Character Guide)</li>
+                        <li>Result sharing features</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">3. User Obligations</h2>
+                    <p>Users must not:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Upload photos of others without permission</li>
+                        <li>Interfere with service operations</li>
+                        <li>Use the service for illegal purposes</li>
+                        <li>Commercially exploit service results without permission</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">4. Disclaimer</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>The Service is provided free of charge and "as is"</li>
+                        <li>Analysis results are for entertainment purposes only</li>
+                        <li>Users are responsible for image copyright and portrait rights</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">5. Contact</h2>
+                    <div class="bg-white/5 p-4 rounded-lg mt-4">
+                        <p>Email: kyh0920@gmail.com</p>
+                    </div>
+                </section>
+            </div>
+            {% endif %}
+
+            <div class="mt-12 text-center">
+                <a href="/" class="btn-mythical inline-block">
+                    {% if lang == "ko" %}홈으로 돌아가기{% else %}Back to Home{% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

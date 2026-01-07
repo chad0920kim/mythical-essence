@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}{% if lang == "ko" %}개인정보처리방침{% else %}Privacy Policy{% endif %} - {{ t.app_name }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+        <div class="card-mythical p-8">
+            <h1 class="font-mythical text-3xl text-gold mb-8 text-center">
+                {% if lang == "ko" %}개인정보처리방침{% else %}Privacy Policy{% endif %}
+            </h1>
+
+            {% if lang == "ko" %}
+            <div class="prose prose-invert max-w-none space-y-6 text-gray-300">
+                <p class="text-sm text-gray-400">시행일: 2026년 1월 1일</p>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제1조 (개인정보의 처리 목적)</h2>
+                    <p>Mythical Essence(이하 "서비스")는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>서비스 제공: 얼굴 분석 및 신화 캐릭터 매칭 서비스 제공</li>
+                        <li>문의 응대: 고객 문의에 대한 답변 및 처리</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제2조 (처리하는 개인정보의 항목)</h2>
+                    <p>서비스는 다음의 개인정보 항목을 처리하고 있습니다.</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>필수항목: 업로드된 얼굴 이미지 (일시적 처리 후 즉시 삭제)</li>
+                        <li>문의 시: 이메일 주소, 문의 내용</li>
+                        <li>자동 수집: 접속 IP, 브라우저 정보, 접속 일시</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제3조 (개인정보의 처리 및 보유기간)</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>얼굴 이미지: 분석 완료 즉시 삭제 (서버에 저장하지 않음)</li>
+                        <li>문의 내용: 문의 처리 완료 후 3년간 보관</li>
+                        <li>접속 로그: 3개월간 보관</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제4조 (개인정보의 제3자 제공)</h2>
+                    <p>서비스는 이용자의 개인정보를 제1조에서 명시한 범위 내에서만 처리하며, 이용자의 사전 동의 없이는 본래의 범위를 초과하여 처리하거나 제3자에게 제공하지 않습니다.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제5조 (개인정보의 파기)</h2>
+                    <p>서비스는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다.</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>전자적 파일: 복원이 불가능한 방법으로 영구 삭제</li>
+                        <li>종이 문서: 분쇄기로 분쇄하거나 소각</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제6조 (정보주체의 권리·의무)</h2>
+                    <p>이용자는 개인정보주체로서 다음과 같은 권리를 행사할 수 있습니다.</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>개인정보 열람 요구</li>
+                        <li>오류 등이 있을 경우 정정 요구</li>
+                        <li>삭제 요구</li>
+                        <li>처리정지 요구</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제7조 (개인정보 보호책임자)</h2>
+                    <p>서비스는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
+                    <div class="bg-white/5 p-4 rounded-lg mt-4">
+                        <p>이메일: kyh0920@gmail.com</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">제8조 (개인정보처리방침의 변경)</h2>
+                    <p>이 개인정보처리방침은 2026년 1월 1일부터 적용됩니다. 변경사항이 있을 경우 웹사이트를 통해 공지할 예정입니다.</p>
+                </section>
+            </div>
+            {% else %}
+            <div class="prose prose-invert max-w-none space-y-6 text-gray-300">
+                <p class="text-sm text-gray-400">Effective Date: January 1, 2026</p>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">1. Purpose of Processing Personal Information</h2>
+                    <p>Mythical Essence ("Service") processes personal information for the following purposes:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Service Provision: Face analysis and mythological character matching</li>
+                        <li>Customer Support: Responding to inquiries</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">2. Personal Information Collected</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Required: Uploaded face images (processed temporarily and deleted immediately)</li>
+                        <li>For inquiries: Email address, inquiry content</li>
+                        <li>Automatically collected: IP address, browser information, access time</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">3. Retention Period</h2>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Face images: Deleted immediately after analysis (not stored on server)</li>
+                        <li>Inquiry content: Retained for 3 years after resolution</li>
+                        <li>Access logs: Retained for 3 months</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">4. Third-Party Disclosure</h2>
+                    <p>We do not share your personal information with third parties without your prior consent.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-xl text-gold mt-8 mb-4">5. Contact</h2>
+                    <div class="bg-white/5 p-4 rounded-lg mt-4">
+                        <p>Email: kyh0920@gmail.com</p>
+                    </div>
+                </section>
+            </div>
+            {% endif %}
+
+            <div class="mt-12 text-center">
+                <a href="/" class="btn-mythical inline-block">
+                    {% if lang == "ko" %}홈으로 돌아가기{% else %}Back to Home{% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
