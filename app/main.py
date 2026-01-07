@@ -118,8 +118,8 @@ async def set_language(lang: str, request: Request):
 
     # Redirect back to referer or home
     referer = request.headers.get("Referer", "/")
-    response = RedirectResponse(url=referer)
-    response.set_cookie(key="lang", value=lang, max_age=31536000)  # 1 year
+    response = RedirectResponse(url=referer, status_code=302)
+    response.set_cookie(key="lang", value=lang, max_age=31536000, path="/")  # 1 year
     return response
 
 

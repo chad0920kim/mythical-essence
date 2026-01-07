@@ -8,7 +8,8 @@
       "Bash(gh repo create:*)",
       "Bash(python -m uvicorn:*)",
       "Bash(curl:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(timeout:*)"
     ]
   }
 }
