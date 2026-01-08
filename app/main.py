@@ -561,6 +561,55 @@ async def health_check():
     return {"status": "healthy", "app": APP_NAME}
 
 
+@app.get("/sitemap.xml")
+async def sitemap(request: Request):
+    """Generate dynamic sitemap.xml for SEO."""
+    from fastapi.responses import Response
+
+    base_url = str(request.base_url).rstrip('/')
+
+    # Start XML
+    xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+
+    # Static pages
+    static_pages = ['/', '/characters', '/gallery', '/privacy', '/terms', '/contact']
+    for page in static_pages:
+        xml_content += f'  <url>\n    <loc>{base_url}{page}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>{"1.0" if page == "/" else "0.8"}</priority>\n  </url>\n'
+
+    # Character detail pages
+    for char_id in ALL_CHARACTER_DESCRIPTIONS.keys():
+        xml_content += f'  <url>\n    <loc>{base_url}/character/{char_id}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n'
+
+    # God detail pages
+    for god_id in GODS_DATABASE.keys():
+        xml_content += f'  <url>\n    <loc>{base_url}/god/{god_id}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.6</priority>\n  </url>\n'
+
+    xml_content += '</urlset>'
+
+    return Response(content=xml_content, media_type="application/xml")
+
+
+@app.get("/robots.txt")
+async def robots(request: Request):
+    """Serve robots.txt."""
+    from fastapi.responses import Response
+
+    base_url = str(request.base_url).rstrip('/')
+
+    content = f"""# MythFace Robots.txt
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: {base_url}/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+"""
+    return Response(content=content, media_type="text/plain")
+
+
 # ============================================
 # Error Handlers
 # ============================================

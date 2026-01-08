@@ -59,12 +59,31 @@
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
-        <div class="text-center">
-            <div class="text-6xl mb-6 animate-float">⚡</div>
-            <h3 class="font-mythical text-2xl text-gold mb-2">{{ t.analyzing }}</h3>
-            <p class="text-gray-300">{{ t.analyzing_message }}</p>
-            <div class="mt-8 w-64 h-1 bg-gray-700 rounded-full overflow-hidden mx-auto">
-                <div class="h-full bg-gold shimmer"></div>
+        <div class="text-center max-w-md mx-4">
+            <div class="text-6xl mb-6 animate-float" id="loadingEmoji">📸</div>
+            <h3 class="font-mythical text-2xl text-gold mb-2" id="loadingTitle">{{ t.analyzing }}</h3>
+            <p class="text-gray-300 mb-2" id="loadingMessage">{{ t.analyzing_message }}</p>
+
+            <!-- Progress Bar -->
+            <div class="mt-6 w-full bg-gray-700 rounded-full overflow-hidden">
+                <div id="progressBar" class="h-2 bg-gradient-to-r from-gold to-yellow-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p class="text-gray-400 text-sm mt-2" id="progressText">0%</p>
+
+            <!-- Step Indicators -->
+            <div class="mt-6 flex justify-center gap-3">
+                <div id="step1" class="flex items-center gap-2 text-sm text-gray-500">
+                    <span class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center">1</span>
+                    <span class="hidden sm:inline">{{ t.analyzing_step1 if t.analyzing_step1 else "Upload" }}</span>
+                </div>
+                <div id="step2" class="flex items-center gap-2 text-sm text-gray-500">
+                    <span class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center">2</span>
+                    <span class="hidden sm:inline">{{ t.analyzing_step2 if t.analyzing_step2 else "Analyze" }}</span>
+                </div>
+                <div id="step3" class="flex items-center gap-2 text-sm text-gray-500">
+                    <span class="w-6 h-6 rounded-full border border-gray-600 flex items-center justify-center">3</span>
+                    <span class="hidden sm:inline">{{ t.analyzing_step3 if t.analyzing_step3 else "Match" }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -245,8 +264,73 @@ uploadForm.addEventListener('submit', async (e) => {
     await performAnalysis();
 });
 
+// Progress update functions
+let progressInterval = null;
+
+const progressSteps = [
+    { percent: 10, emoji: '📤', msg: translations.analyzing_msg1 || 'Uploading your photo...', step: 1 },
+    { percent: 25, emoji: '🔍', msg: translations.analyzing_msg2 || 'Detecting facial features...', step: 1 },
+    { percent: 40, emoji: '✨', msg: translations.analyzing_msg3 || 'Analyzing your essence...', step: 2 },
+    { percent: 60, emoji: '📚', msg: translations.analyzing_msg4 || 'Searching mythological archives...', step: 2 },
+    { percent: 75, emoji: '⚡', msg: translations.analyzing_msg5 || 'Finding your divine match...', step: 3 },
+    { percent: 90, emoji: '🌟', msg: translations.analyzing_msg6 || 'Almost there...', step: 3 }
+];
+
+function updateProgress(percent, emoji, message, activeStep) {
+    document.getElementById('progressBar').style.width = percent + '%';
+    document.getElementById('progressText').textContent = percent + '%';
+    document.getElementById('loadingEmoji').textContent = emoji;
+    document.getElementById('loadingMessage').textContent = message;
+
+    // Update step indicators
+    for (let i = 1; i <= 3; i++) {
+        const stepEl = document.getElementById('step' + i);
+        const circle = stepEl.querySelector('span');
+        if (i < activeStep) {
+            stepEl.classList.remove('text-gray-500');
+            stepEl.classList.add('text-gold');
+            circle.classList.remove('border-gray-600');
+            circle.classList.add('border-gold', 'bg-gold/20');
+        } else if (i === activeStep) {
+            stepEl.classList.remove('text-gray-500');
+            stepEl.classList.add('text-gold');
+            circle.classList.remove('border-gray-600');
+            circle.classList.add('border-gold');
+        } else {
+            stepEl.classList.add('text-gray-500');
+            stepEl.classList.remove('text-gold');
+            circle.classList.add('border-gray-600');
+            circle.classList.remove('border-gold', 'bg-gold/20');
+        }
+    }
+}
+
+function startProgressAnimation() {
+    let stepIndex = 0;
+    updateProgress(progressSteps[0].percent, progressSteps[0].emoji, progressSteps[0].msg, progressSteps[0].step);
+
+    progressInterval = setInterval(() => {
+        stepIndex++;
+        if (stepIndex < progressSteps.length) {
+            const step = progressSteps[stepIndex];
+            updateProgress(step.percent, step.emoji, step.msg, step.step);
+        }
+    }, 2500); // Change every 2.5 seconds
+}
+
+function stopProgressAnimation() {
+    if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+    }
+    // Reset progress bar
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('progressText').textContent = '0%';
+}
+
 async function performAnalysis() {
     loadingOverlay.classList.remove('hidden');
+    startProgressAnimation();
 
     const formData = new FormData();
     formData.append('file', selectedFile);
@@ -259,6 +343,11 @@ async function performAnalysis() {
 
         const data = await response.json();
 
+        // Show completion
+        updateProgress(100, '✅', translations.analyzing_complete || 'Analysis complete!', 3);
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        stopProgressAnimation();
         loadingOverlay.classList.add('hidden');
 
         if (data.success) {
@@ -271,6 +360,7 @@ async function performAnalysis() {
             alert(data.detail || data.message || translations.error_generic);
         }
     } catch (error) {
+        stopProgressAnimation();
         loadingOverlay.classList.add('hidden');
         alert(translations.error_generic);
         console.error(error);

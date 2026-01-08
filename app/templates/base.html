@@ -4,7 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ t.app_name }}{% endblock %}</title>
+
+    <!-- SEO Meta Tags -->
     <meta name="description" content="{{ t.app_description }}">
+    <meta name="keywords" content="MythFace, mythology, face analysis, AI, god matching, mythical characters, 신화, 얼굴분석, 그리스신화, 북유럽신화, 한국신화">
+    <meta name="author" content="MythFace">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="{% block og_title %}{{ t.app_name }} - {{ t.app_tagline }}{% endblock %}">
+    <meta property="og:description" content="{{ t.app_description }}">
+    <meta property="og:image" content="{{ request.url_for('static', path='images/og-image.png') }}">
+    <meta property="og:locale" content="{{ lang }}">
+    <meta property="og:site_name" content="{{ t.app_name }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ t.app_name }} - {{ t.app_tagline }}">
+    <meta name="twitter:description" content="{{ t.app_description }}">
+    <meta name="twitter:image" content="{{ request.url_for('static', path='images/og-image.png') }}">
+
+    <!-- Naver / Korean Search Engines -->
+    <meta name="naver-site-verification" content="">
+    <meta http-equiv="Content-Language" content="{{ lang }}">
+
+    <!-- Mobile App Meta -->
+    <meta name="application-name" content="{{ t.app_name }}">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ t.app_name }}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">

@@ -1,5 +1,5 @@
 {
-  "app_name": "Mythical Essence",
+  "app_name": "MythFace",
   "app_tagline": "당신 안의 신화를 발견하세요",
   "app_description": "AI가 당신의 얼굴을 분석하여 가장 닮은 신화 속 신을 찾아드립니다",
 
@@ -35,6 +35,16 @@
 
   "analyzing": "분석 중...",
   "analyzing_message": "신들의 세계에서 당신의 본질을 찾고 있습니다",
+  "analyzing_step1": "업로드",
+  "analyzing_step2": "분석",
+  "analyzing_step3": "매칭",
+  "analyzing_msg1": "사진을 업로드하는 중...",
+  "analyzing_msg2": "얼굴 특징을 감지하는 중...",
+  "analyzing_msg3": "당신의 본질을 분석하는 중...",
+  "analyzing_msg4": "신화 기록을 검색하는 중...",
+  "analyzing_msg5": "당신의 신화적 매칭을 찾는 중...",
+  "analyzing_msg6": "거의 완료되었습니다...",
+  "analyzing_complete": "분석 완료!",
 
   "result_title": "당신의 신화적 본질",
   "result_match": "일치도",
@@ -74,7 +84,7 @@
   "privacy_title": "개인정보처리방침",
   "privacy_effective_date": "시행일: 2026년 1월 1일",
   "privacy_section1_title": "제1조 (개인정보의 처리 목적)",
-  "privacy_section1_content": "Mythical Essence(이하 \"서비스\")는 다음의 목적을 위하여 개인정보를 처리합니다:",
+  "privacy_section1_content": "MythFace(이하 \"서비스\")는 다음의 목적을 위하여 개인정보를 처리합니다:",
   "privacy_section1_item1": "서비스 제공: 얼굴 분석 및 신화 캐릭터 매칭 서비스 제공",
   "privacy_section1_item2": "문의 응대: 고객 문의에 대한 답변 및 처리",
   "privacy_section2_title": "제2조 (처리하는 개인정보의 항목)",
@@ -93,7 +103,7 @@
   "terms_title": "이용약관",
   "terms_effective_date": "시행일: 2026년 1월 1일",
   "terms_section1_title": "제1조 (목적)",
-  "terms_section1_content": "이 약관은 Mythical Essence(이하 \"서비스\")가 제공하는 얼굴 분석 및 신화 캐릭터 매칭 서비스의 이용조건을 규정합니다.",
+  "terms_section1_content": "이 약관은 MythFace(이하 \"서비스\")가 제공하는 얼굴 분석 및 신화 캐릭터 매칭 서비스의 이용조건을 규정합니다.",
   "terms_section2_title": "제2조 (서비스의 제공)",
   "terms_section2_content": "서비스는 다음과 같은 기능을 제공합니다:",
   "terms_section2_item1": "얼굴 이미지 분석을 통한 신화 캐릭터 매칭",
