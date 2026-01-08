@@ -62,10 +62,10 @@
             <!-- Actions -->
             <div class="flex justify-center gap-4">
                 <a href="/" class="btn-mythical">
-                    ✨ Find Your Match
+                    {{ t.characters_find_match if 'characters_find_match' in t else 'Find My Match' }}
                 </a>
-                <a href="/gallery" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
-                    ← {{ t.nav_gallery }}
+                <a href="/gallery{{ '?culture=' + from_culture if from_culture else '' }}" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                    {{ t.nav_gallery }}
                 </a>
             </div>
         </div>

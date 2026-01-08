@@ -365,7 +365,7 @@ async def result_page(request: Request, result_id: str):
 
 
 @app.get("/god/{god_id}", response_class=HTMLResponse)
-async def god_detail(request: Request, god_id: str):
+async def god_detail(request: Request, god_id: str, from_culture: Optional[str] = None):
     """Display god detail page."""
     god = GODS_DATABASE.get(god_id)
     if not god:
@@ -373,6 +373,7 @@ async def god_detail(request: Request, god_id: str):
 
     context = get_base_context(request)
     context["god"] = god
+    context["from_culture"] = from_culture
     return templates.TemplateResponse("god_detail.html", context)
 
 
@@ -414,6 +415,7 @@ async def gallery(request: Request, culture: Optional[str] = None):
     context["gods"] = gods
     context["cultures"] = list(Culture)
     context["selected_culture"] = culture
+    context["descriptions"] = ALL_CHARACTER_DESCRIPTIONS
 
     return templates.TemplateResponse("gallery.html", context)
 
@@ -462,7 +464,7 @@ async def character_browser(request: Request, category: Optional[str] = None):
 
 
 @app.get("/character/{char_id}", response_class=HTMLResponse)
-async def character_detail(request: Request, char_id: str):
+async def character_detail(request: Request, char_id: str, from_category: Optional[str] = None):
     """Display detailed character information."""
     character_raw = get_character_description(char_id)
     if not character_raw:
@@ -474,6 +476,7 @@ async def character_detail(request: Request, char_id: str):
     # Translate character
     character = get_translated_character(character_raw, lang)
     context["character"] = character
+    context["from_category"] = from_category
 
     # Get category info
     category = get_character_category(char_id)

@@ -8,7 +8,7 @@
 
         <!-- Back Navigation -->
         <div class="mb-8">
-            <a href="/characters{% if category %}?category={{ category.value }}{% endif %}"
+            <a href="/characters{{ '?category=' + from_category if from_category else '' }}"
                class="text-gray-400 hover:text-gold transition-colors flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
@@ -21,8 +21,9 @@
         <div class="card-mythical p-8">
             <!-- Header Section -->
             <div class="text-center mb-10">
-                <!-- Character Avatar -->
-                <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 shadow-lg overflow-hidden">
+                <!-- Character Avatar (클릭하면 확대) -->
+                <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 shadow-lg overflow-hidden cursor-pointer hover:ring-4 hover:ring-gold/30 transition-all"
+                     onclick="showImageModal('/static/images/gods/{{ character.id }}.png', '{{ character.name }}', '{{ character.tagline | e }}')">
                     <img src="/static/images/gods/{{ character.id }}.png"
                          alt="{{ character.name }}"
                          class="w-full h-full object-cover"
@@ -157,12 +158,46 @@
         <!-- Actions -->
         <div class="flex flex-wrap justify-center gap-4 mt-8">
             <a href="/" class="btn-mythical">
-                ✨ {{ t.characters_find_match }}
+                {{ t.characters_find_match }}
             </a>
-            <a href="/characters" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
-                📚 {{ t.characters_browse_all }}
+            <a href="/characters{{ '?category=' + from_category if from_category else '' }}" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                {{ t.characters_browse_all }}
             </a>
         </div>
     </div>
 </div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden" onclick="closeImageModal(event)">
+    <div class="relative max-w-2xl w-full mx-4 p-4">
+        <button onclick="closeImageModal()" class="absolute top-0 right-0 -mt-12 text-white/70 hover:text-white text-3xl font-light z-10">&times;</button>
+        <div class="card-mythical p-4 text-center" onclick="event.stopPropagation()">
+            <img id="modalImage" src="" alt="" class="max-w-full max-h-[70vh] mx-auto rounded-lg shadow-2xl">
+            <h3 id="modalTitle" class="font-mythical text-2xl text-gold mt-4"></h3>
+            <p id="modalTagline" class="text-gray-400 mt-2"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+function showImageModal(imageSrc, title, tagline) {
+    const modal = document.getElementById('imageModal');
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('modalImage').alt = title;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalTagline').textContent = tagline;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    document.getElementById('imageModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeImageModal();
+});
+</script>
 {% endblock %}
