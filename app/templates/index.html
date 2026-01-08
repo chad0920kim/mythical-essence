@@ -69,6 +69,47 @@
         </div>
     </div>
 
+    <!-- Ad Modal -->
+    <div id="adModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden">
+        <div class="card-mythical max-w-lg w-full mx-4 p-8 text-center">
+            <h2 class="font-mythical text-2xl text-gold mb-4">{{ t.ad_modal_title }}</h2>
+            <p class="text-gray-300 mb-6">{{ t.ad_modal_message }}</p>
+
+            <!-- Ad Container -->
+            <div id="adContainer" class="bg-gray-800 rounded-lg p-4 mb-6 min-h-[250px] flex items-center justify-center">
+                {% if adsense_client_id and adsense_ad_slot %}
+                <!-- AdSense Ad Unit -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="{{ adsense_client_id }}"
+                     data-ad-slot="{{ adsense_ad_slot }}"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                {% else %}
+                <!-- Placeholder for development -->
+                <div id="adPlaceholder" class="text-gray-500">
+                    <div class="text-4xl mb-2">📺</div>
+                    <p>{{ t.ad_modal_watching }}</p>
+                    <div id="adTimer" class="text-gold text-2xl mt-4">5</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Status message -->
+            <p id="adStatus" class="text-gray-400 mb-4 hidden">{{ t.ad_modal_complete }}</p>
+
+            <!-- Buttons -->
+            <div class="flex gap-4 justify-center">
+                <button id="adContinueBtn" onclick="confirmAdWatched()" class="btn-mythical hidden">
+                    {{ t.ad_modal_continue }}
+                </button>
+                <button onclick="closeAdModal()" class="px-6 py-3 border border-gray-600 text-gray-400 rounded-full hover:bg-gray-800 transition-colors">
+                    {{ t.ad_modal_close }}
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Result Modal -->
     <div id="resultModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden overflow-y-auto py-8">
         <div class="card-mythical max-w-2xl w-full mx-4 p-8">
@@ -114,6 +155,10 @@
 {% endblock %}
 
 {% block scripts %}
+{% if adsense_client_id %}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ adsense_client_id }}"
+     crossorigin="anonymous"></script>
+{% endif %}
 <script>
 const translations = {{ t | tojson | safe }};
 
@@ -123,8 +168,10 @@ const uploadForm = document.getElementById('uploadForm');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const resultModal = document.getElementById('resultModal');
+const adModal = document.getElementById('adModal');
 
 let selectedFile = null;
+let pendingAnalysis = false;  // Flag to retry after ad
 
 // Drag and drop handlers
 uploadZone.addEventListener('dragover', (e) => {
@@ -195,6 +242,10 @@ uploadForm.addEventListener('submit', async (e) => {
 
     if (!selectedFile) return;
 
+    await performAnalysis();
+});
+
+async function performAnalysis() {
     loadingOverlay.classList.remove('hidden');
 
     const formData = new FormData();
@@ -212,15 +263,87 @@ uploadForm.addEventListener('submit', async (e) => {
 
         if (data.success) {
             showResult(data);
+        } else if (data.require_ad) {
+            // Show ad modal
+            pendingAnalysis = true;
+            showAdModal();
         } else {
-            alert(data.detail || translations.error_generic);
+            alert(data.detail || data.message || translations.error_generic);
         }
     } catch (error) {
         loadingOverlay.classList.add('hidden');
         alert(translations.error_generic);
         console.error(error);
     }
-});
+}
+
+// Ad Modal Functions
+function showAdModal() {
+    adModal.classList.remove('hidden');
+    document.getElementById('adContinueBtn').classList.add('hidden');
+    document.getElementById('adStatus').classList.add('hidden');
+
+    // Start countdown for development placeholder
+    const timerEl = document.getElementById('adTimer');
+    if (timerEl) {
+        let countdown = 5;
+        timerEl.textContent = countdown;
+
+        const interval = setInterval(() => {
+            countdown--;
+            timerEl.textContent = countdown;
+
+            if (countdown <= 0) {
+                clearInterval(interval);
+                adComplete();
+            }
+        }, 1000);
+    } else {
+        // For real AdSense, trigger ad display
+        try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            // Wait for ad to load, then enable continue button
+            setTimeout(adComplete, 5000);
+        } catch (e) {
+            console.log('AdSense not loaded');
+            adComplete();
+        }
+    }
+}
+
+function adComplete() {
+    document.getElementById('adContinueBtn').classList.remove('hidden');
+    document.getElementById('adStatus').classList.remove('hidden');
+    const placeholder = document.getElementById('adPlaceholder');
+    if (placeholder) {
+        placeholder.innerHTML = '<div class="text-4xl mb-2">✅</div><p class="text-gold">' + translations.ad_modal_complete + '</p>';
+    }
+}
+
+function closeAdModal() {
+    adModal.classList.add('hidden');
+    pendingAnalysis = false;
+}
+
+async function confirmAdWatched() {
+    try {
+        const response = await fetch('/api/ad-watched', {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            adModal.classList.add('hidden');
+
+            // Retry analysis if pending
+            if (pendingAnalysis && selectedFile) {
+                pendingAnalysis = false;
+                await performAnalysis();
+            }
+        }
+    } catch (error) {
+        console.error('Error confirming ad:', error);
+    }
+}
 
 function showResult(data) {
     const match = data.primary_match;

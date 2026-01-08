@@ -55,6 +55,16 @@
   "error_no_face": "No face detected. Please try another photo.",
   "error_upload": "Upload error. Please try again.",
   "error_generic": "Something went wrong. Please try again.",
+  "error_ad_required": "Please watch an ad to continue using the service.",
+
+  "ad_modal_title": "Watch Ad to Continue",
+  "ad_modal_message": "You've used your free analysis. Watch a short ad to unlock another analysis.",
+  "ad_modal_watching": "Please watch the ad...",
+  "ad_modal_complete": "Ad Complete! You can now continue.",
+  "ad_modal_continue": "Continue",
+  "ad_modal_close": "Close",
+  "ad_free_remaining": "{count} free analysis remaining",
+  "ad_no_free_remaining": "Watch ad for more analysis",
 
   "footer_privacy": "Privacy Policy",
   "footer_terms": "Terms of Service",

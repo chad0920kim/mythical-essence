@@ -17,7 +17,9 @@ from app.config import (
     APP_NAME, APP_DESCRIPTION, DEBUG,
     STATIC_DIR, TEMPLATES_DIR, LOCALES_DIR, UPLOADS_DIR,
     SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE,
-    MAX_IMAGE_SIZE, ALLOWED_EXTENSIONS
+    MAX_IMAGE_SIZE, ALLOWED_EXTENSIONS,
+    FREE_FACE_SWAP_COUNT, AD_REQUIRED_AFTER,
+    ADSENSE_CLIENT_ID, ADSENSE_AD_SLOT
 )
 from app.services.face_analysis import get_face_analyzer
 from app.services.god_matcher import match_face_to_god, get_primary_match
@@ -146,10 +148,24 @@ def get_user_language(request: Request) -> str:
 # ============================================
 # Template Context Helper
 # ============================================
+def get_usage_count(request: Request) -> int:
+    """Get user's face swap usage count from cookie."""
+    try:
+        return int(request.cookies.get("face_swap_count", "0"))
+    except (ValueError, TypeError):
+        return 0
+
+
+def get_ad_watched(request: Request) -> bool:
+    """Check if user has watched ad for current session."""
+    return request.cookies.get("ad_watched", "0") == "1"
+
+
 def get_base_context(request: Request) -> dict:
     """Get base context for templates."""
     lang = get_user_language(request)
     translations = load_translations(lang)
+    usage_count = get_usage_count(request)
 
     return {
         "request": request,
@@ -157,6 +173,11 @@ def get_base_context(request: Request) -> dict:
         "t": translations,
         "languages": SUPPORTED_LANGUAGES,
         "app_name": APP_NAME,
+        "usage_count": usage_count,
+        "free_limit": FREE_FACE_SWAP_COUNT,
+        "ad_required": usage_count >= AD_REQUIRED_AFTER,
+        "adsense_client_id": ADSENSE_CLIENT_ID,
+        "adsense_ad_slot": ADSENSE_AD_SLOT,
     }
 
 
@@ -183,6 +204,29 @@ async def set_language(lang: str, request: Request):
     return response
 
 
+@app.get("/api/usage-status")
+async def get_usage_status(request: Request):
+    """Get current usage status for face swap."""
+    usage_count = get_usage_count(request)
+    ad_watched = get_ad_watched(request)
+
+    return JSONResponse(content={
+        "usage_count": usage_count,
+        "free_limit": FREE_FACE_SWAP_COUNT,
+        "ad_required": usage_count >= AD_REQUIRED_AFTER and not ad_watched,
+        "can_use": usage_count < FREE_FACE_SWAP_COUNT or ad_watched,
+    })
+
+
+@app.post("/api/ad-watched")
+async def confirm_ad_watched(request: Request):
+    """Confirm that user has watched an ad."""
+    response = JSONResponse(content={"success": True, "message": "Ad confirmed"})
+    # Set cookie to mark ad as watched (expires in 1 hour)
+    response.set_cookie(key="ad_watched", value="1", max_age=3600, path="/")
+    return response
+
+
 @app.post("/analyze")
 async def analyze_face(
     request: Request,
@@ -192,6 +236,22 @@ async def analyze_face(
     """Analyze uploaded face and return matching god."""
     lang = get_user_language(request)
     translations = load_translations(lang)
+
+    # Check usage limits
+    usage_count = get_usage_count(request)
+    ad_watched = get_ad_watched(request)
+
+    # If exceeded free limit and haven't watched ad, require ad
+    if usage_count >= FREE_FACE_SWAP_COUNT and not ad_watched:
+        return JSONResponse(
+            content={
+                "success": False,
+                "require_ad": True,
+                "message": translations.get("error_ad_required", "Please watch an ad to continue"),
+                "usage_count": usage_count,
+            },
+            status_code=402  # Payment Required
+        )
 
     # Validate file
     if not file.filename:
@@ -281,9 +341,19 @@ async def analyze_face(
             "intensity": round(features.intensity_level * 100),
         },
         "result_image": result_image_base64,
+        "usage_count": usage_count + 1,
     }
 
-    return JSONResponse(content=response_data)
+    # Create response and update usage cookie
+    response = JSONResponse(content=response_data)
+    new_count = usage_count + 1
+    response.set_cookie(key="face_swap_count", value=str(new_count), max_age=86400, path="/")  # 24 hours
+
+    # Reset ad_watched after use (require new ad for next time)
+    if ad_watched:
+        response.set_cookie(key="ad_watched", value="0", max_age=0, path="/")
+
+    return response
 
 
 @app.get("/result/{result_id}", response_class=HTMLResponse)

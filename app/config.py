@@ -52,3 +52,11 @@ OUTPUT_IMAGE_SIZE = (512, 512)
 # Face analysis settings
 MIN_FACE_SIZE = 50  # Minimum face size in pixels
 MAX_FACES = 1  # Only process one face per image
+
+# Face Swap Usage Settings
+FREE_FACE_SWAP_COUNT = 1  # Number of free face swaps per session
+AD_REQUIRED_AFTER = 1  # Show ad after this many uses (can be increased later)
+
+# AdSense Settings
+ADSENSE_CLIENT_ID = os.getenv("ADSENSE_CLIENT_ID", "")  # ca-pub-XXXXXXXXXX
+ADSENSE_AD_SLOT = os.getenv("ADSENSE_AD_SLOT", "")  # Ad unit ID

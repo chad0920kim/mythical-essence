@@ -1,7 +1,10 @@
 """
 Face Swap Service
-Handles face swapping with pre-made god templates
+Uses fal.ai API for high-quality face swapping
 """
+import os
+import base64
+import requests
 import cv2
 import numpy as np
 from pathlib import Path
@@ -14,37 +17,44 @@ from app.config import GODS_IMAGES_DIR, OUTPUT_IMAGE_SIZE
 
 class FaceSwapper:
     """
-    Face swapping service using InsightFace.
-    Falls back to overlay mode if InsightFace is not available.
+    Face swapping service using fal.ai API.
+    Provides high-quality face swap results.
     """
 
     def __init__(self):
-        self.insightface_available = False
-        self.swapper = None
-        self.app = None
+        self.fal_api_key = os.getenv("FAL_API_KEY")
+        self.fal_available = bool(self.fal_api_key)
 
-        try:
-            import insightface
-            from insightface.app import FaceAnalysis
+        if not self.fal_available:
+            print("FAL_API_KEY not set. Face swap will use fallback mode.")
 
-            # Initialize InsightFace
-            self.app = FaceAnalysis(name='buffalo_l')
-            self.app.prepare(ctx_id=0, det_size=(640, 640))
+    def _encode_image_to_base64(self, image: np.ndarray) -> str:
+        """Encode numpy image to base64 data URL."""
+        # Convert BGR to RGB
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(rgb_image)
 
-            # Try to load swapper model
-            model_path = Path.home() / '.insightface' / 'models' / 'inswapper_128.onnx'
-            if model_path.exists():
-                self.swapper = insightface.model_zoo.get_model(str(model_path))
-                self.insightface_available = True
-            else:
-                print(f"InsightFace swapper model not found at {model_path}")
-                print("Face swap will use overlay mode instead.")
+        buffer = io.BytesIO()
+        pil_image.save(buffer, format='PNG')
+        data = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-        except ImportError:
-            print("InsightFace not available. Using overlay mode.")
-        except Exception as e:
-            print(f"Error initializing InsightFace: {e}")
-            print("Using overlay mode.")
+        return f"data:image/png;base64,{data}"
+
+    def _encode_file_to_base64(self, file_path: Path) -> str:
+        """Encode image file to base64 data URL."""
+        with open(file_path, "rb") as f:
+            data = base64.b64encode(f.read()).decode("utf-8")
+
+        ext = file_path.suffix.lower()
+        mime_types = {
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".png": "image/png",
+            ".webp": "image/webp"
+        }
+        mime = mime_types.get(ext, "image/png")
+
+        return f"data:{mime};base64,{data}"
 
     def swap_face(
         self,
@@ -53,7 +63,7 @@ class FaceSwapper:
         output_size: tuple = OUTPUT_IMAGE_SIZE
     ) -> Optional[np.ndarray]:
         """
-        Swap face from source image onto god template.
+        Swap face from source image onto god template using fal.ai.
 
         Args:
             source_image: User's image (BGR numpy array)
@@ -63,128 +73,82 @@ class FaceSwapper:
         Returns:
             Result image with swapped face, or None if failed
         """
-        # Load god template
-        template_path = GODS_IMAGES_DIR / f"{target_god_id}.png"
+        # Find template image
+        template_path = self._find_template(target_god_id)
 
-        if not template_path.exists():
-            # Try without extension or with jpg
-            for ext in ['.jpg', '.jpeg', '.webp']:
-                alt_path = GODS_IMAGES_DIR / f"{target_god_id}{ext}"
-                if alt_path.exists():
-                    template_path = alt_path
-                    break
-
-        if not template_path.exists():
-            # No template - use fallback
+        if template_path is None:
+            print(f"No template found for {target_god_id}")
             return self._create_fallback_result(source_image, target_god_id, output_size)
 
-        template = cv2.imread(str(template_path))
-        if template is None:
-            return self._create_fallback_result(source_image, target_god_id, output_size)
-
-        if self.insightface_available:
-            return self._swap_with_insightface(source_image, template, output_size)
-        else:
-            return self._overlay_face(source_image, template, output_size)
-
-    def _swap_with_insightface(
-        self,
-        source: np.ndarray,
-        template: np.ndarray,
-        output_size: tuple
-    ) -> Optional[np.ndarray]:
-        """Perform actual face swap using InsightFace."""
-        try:
-            # Detect faces
-            source_faces = self.app.get(source)
-            template_faces = self.app.get(template)
-
-            if len(source_faces) == 0:
-                print("No face detected in source image")
-                return None
-
-            if len(template_faces) == 0:
-                print("No face detected in template image")
-                return self._overlay_face(source, template, output_size)
-
-            # Swap faces
-            source_face = source_faces[0]
-            result = self.swapper.get(template, template_faces[0], source_face, paste_back=True)
-
-            # Resize to output size
-            result = cv2.resize(result, output_size)
-
-            return result
-
-        except Exception as e:
-            print(f"Face swap error: {e}")
-            return self._overlay_face(source, template, output_size)
-
-    def _overlay_face(
-        self,
-        source: np.ndarray,
-        template: np.ndarray,
-        output_size: tuple
-    ) -> np.ndarray:
-        """
-        Fallback: Create an artistic overlay effect.
-        Blends the user's face with the template.
-        """
-        try:
-            import mediapipe as mp
-
-            # Resize images
-            source_resized = cv2.resize(source, output_size)
-            template_resized = cv2.resize(template, output_size)
-
-            # Detect face in source
-            mp_face_mesh = mp.solutions.face_mesh
-            face_mesh = mp_face_mesh.FaceMesh(static_image_mode=True, max_num_faces=1)
-
-            rgb_source = cv2.cvtColor(source_resized, cv2.COLOR_BGR2RGB)
-            results = face_mesh.process(rgb_source)
-
-            if results.multi_face_landmarks:
-                # Create face mask
-                h, w = source_resized.shape[:2]
-                mask = np.zeros((h, w), dtype=np.float32)
-
-                landmarks = results.multi_face_landmarks[0]
-                face_oval = [10, 338, 297, 332, 284, 251, 389, 356, 454,
-                           323, 361, 288, 397, 365, 379, 378, 400, 377,
-                           152, 148, 176, 149, 150, 136, 172, 58, 132,
-                           93, 234, 127, 162, 21, 54, 103, 67, 109]
-
-                points = []
-                for idx in face_oval:
-                    lm = landmarks.landmark[idx]
-                    points.append([int(lm.x * w), int(lm.y * h)])
-
-                points = np.array(points, dtype=np.int32)
-                cv2.fillConvexPoly(mask, points, 1.0)
-
-                # Blur mask edges
-                mask = cv2.GaussianBlur(mask, (51, 51), 0)
-                mask = np.stack([mask] * 3, axis=-1)
-
-                # Blend
-                result = (source_resized * mask * 0.3 + template_resized * (1 - mask * 0.3)).astype(np.uint8)
-
-                # Add artistic filter
-                result = self._apply_artistic_filter(result)
-
+        if self.fal_available:
+            result = self._swap_with_fal(source_image, template_path)
+            if result is not None:
+                # Resize to output size
+                result = cv2.resize(result, output_size)
                 return result
 
-        except Exception as e:
-            print(f"Overlay error: {e}")
+        # Fallback to styled template
+        return self._create_fallback_result(source_image, target_god_id, output_size)
 
-        # Ultimate fallback - just return styled template
-        template_resized = cv2.resize(template, output_size)
-        return self._apply_artistic_filter(template_resized)
+    def _find_template(self, god_id: str) -> Optional[Path]:
+        """Find template image for given god ID."""
+        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+            template_path = GODS_IMAGES_DIR / f"{god_id}{ext}"
+            if template_path.exists():
+                return template_path
+        return None
+
+    def _swap_with_fal(
+        self,
+        source_image: np.ndarray,
+        template_path: Path
+    ) -> Optional[np.ndarray]:
+        """Perform face swap using fal.ai API."""
+        try:
+            # Encode images
+            source_b64 = self._encode_image_to_base64(source_image)
+            target_b64 = self._encode_file_to_base64(template_path)
+
+            # Call fal.ai API
+            response = requests.post(
+                "https://fal.run/fal-ai/face-swap",
+                headers={
+                    "Authorization": f"Key {self.fal_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "base_image_url": target_b64,  # Template (background)
+                    "swap_image_url": source_b64   # Source (face to extract)
+                },
+                timeout=60
+            )
+
+            if response.status_code != 200:
+                print(f"fal.ai API error: {response.status_code} - {response.text}")
+                return None
+
+            result = response.json()
+
+            if "image" in result and "url" in result["image"]:
+                image_url = result["image"]["url"]
+
+                # Download result image
+                img_response = requests.get(image_url, timeout=30)
+                if img_response.status_code == 200:
+                    # Convert to numpy array
+                    nparr = np.frombuffer(img_response.content, np.uint8)
+                    result_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+                    return result_image
+
+            print("No image in fal.ai response")
+            return None
+
+        except Exception as e:
+            print(f"fal.ai face swap error: {e}")
+            return None
 
     def _apply_artistic_filter(self, image: np.ndarray) -> np.ndarray:
         """Apply artistic filter to make the result look more mythical."""
-        # Convert to float
         img_float = image.astype(np.float32) / 255.0
 
         # Increase contrast slightly
@@ -213,8 +177,17 @@ class FaceSwapper:
         god_id: str,
         output_size: tuple
     ) -> np.ndarray:
-        """Create a fallback result when no template is available."""
-        # Create a styled version of the source image
+        """Create a fallback result when face swap fails."""
+        # Try to load and style the template
+        template_path = self._find_template(god_id)
+
+        if template_path is not None:
+            template = cv2.imread(str(template_path))
+            if template is not None:
+                result = cv2.resize(template, output_size)
+                return self._apply_artistic_filter(result)
+
+        # Ultimate fallback - style the source image
         result = cv2.resize(source, output_size)
         result = self._apply_artistic_filter(result)
 
@@ -222,13 +195,11 @@ class FaceSwapper:
         font = cv2.FONT_HERSHEY_SIMPLEX
         god_name = god_id.replace('_', ' ').title()
 
-        # Add semi-transparent overlay at bottom
         overlay = result.copy()
         cv2.rectangle(overlay, (0, output_size[1] - 60), (output_size[0], output_size[1]),
                      (0, 0, 0), -1)
         result = cv2.addWeighted(result, 0.7, overlay, 0.3, 0)
 
-        # Add god name
         text_size = cv2.getTextSize(god_name, font, 0.8, 2)[0]
         text_x = (output_size[0] - text_size[0]) // 2
         cv2.putText(result, god_name, (text_x, output_size[1] - 25),
@@ -239,7 +210,6 @@ class FaceSwapper:
 
 def convert_to_bytes(image: np.ndarray, format: str = 'PNG') -> bytes:
     """Convert numpy image to bytes."""
-    # Convert BGR to RGB
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     pil_image = Image.fromarray(rgb_image)
 
@@ -250,7 +220,6 @@ def convert_to_bytes(image: np.ndarray, format: str = 'PNG') -> bytes:
 
 def convert_to_base64(image: np.ndarray, format: str = 'PNG') -> str:
     """Convert numpy image to base64 string."""
-    import base64
     img_bytes = convert_to_bytes(image, format)
     return base64.b64encode(img_bytes).decode('utf-8')
 
