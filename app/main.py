@@ -234,126 +234,157 @@ async def analyze_face(
     region: Optional[str] = Form(None)
 ):
     """Analyze uploaded face and return matching god."""
+    import traceback
+
     lang = get_user_language(request)
     translations = load_translations(lang)
 
-    # Check usage limits
-    usage_count = get_usage_count(request)
-    ad_watched = get_ad_watched(request)
-
-    # If exceeded free limit and haven't watched ad, require ad
-    if usage_count >= FREE_FACE_SWAP_COUNT and not ad_watched:
-        return JSONResponse(
-            content={
-                "success": False,
-                "require_ad": True,
-                "message": translations.get("error_ad_required", "Please watch an ad to continue"),
-                "usage_count": usage_count,
-            },
-            status_code=402  # Payment Required
-        )
-
-    # Validate file
-    if not file.filename:
-        raise HTTPException(status_code=400, detail=translations.get("error_upload", "Upload error"))
-
-    # Check file extension
-    ext = file.filename.rsplit(".", 1)[-1].lower()
-    if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail=f"Invalid file format. Allowed: {', '.join(ALLOWED_EXTENSIONS)}")
-
-    # Read file
-    contents = await file.read()
-
-    # Check file size
-    if len(contents) > MAX_IMAGE_SIZE:
-        raise HTTPException(status_code=400, detail="File too large. Maximum size is 10MB.")
-
-    # Analyze face
-    analyzer = get_face_analyzer()
-    features = analyzer.analyze_from_bytes(contents)
-
-    if features is None:
-        raise HTTPException(status_code=400, detail=translations.get("error_no_face", "No face detected"))
-
-    # Get region from language if not specified
-    if not region:
-        lang_info = SUPPORTED_LANGUAGES.get(lang, {})
-        region = lang_info.get("region")
-
-    # Match to gods
-    matches = match_face_to_god(features, region=region, top_n=5)
-
-    if not matches:
-        raise HTTPException(status_code=500, detail=translations.get("error_generic", "Something went wrong"))
-
-    primary_match = matches[0]
-
-    # Generate result image (optional - may fail without proper templates)
-    result_image_base64 = None
     try:
-        import numpy as np
-        import cv2
+        # Check usage limits
+        usage_count = get_usage_count(request)
+        ad_watched = get_ad_watched(request)
 
-        nparr = np.frombuffer(contents, np.uint8)
-        source_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # If exceeded free limit and haven't watched ad, require ad
+        if usage_count >= FREE_FACE_SWAP_COUNT and not ad_watched:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "require_ad": True,
+                    "message": translations.get("error_ad_required", "Please watch an ad to continue"),
+                    "usage_count": usage_count,
+                },
+                status_code=402  # Payment Required
+            )
 
-        if source_image is not None:
-            swapper = get_face_swapper()
-            result_image = swapper.swap_face(source_image, primary_match.god.id)
-            if result_image is not None:
-                result_image_base64 = convert_to_base64(result_image)
+        # Validate file
+        if not file.filename:
+            return JSONResponse(
+                content={"success": False, "detail": translations.get("error_upload", "Upload error")},
+                status_code=400
+            )
+
+        # Check file extension
+        ext = file.filename.rsplit(".", 1)[-1].lower()
+        if ext not in ALLOWED_EXTENSIONS:
+            return JSONResponse(
+                content={"success": False, "detail": f"Invalid file format. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"},
+                status_code=400
+            )
+
+        # Read file
+        contents = await file.read()
+
+        # Check file size
+        if len(contents) > MAX_IMAGE_SIZE:
+            return JSONResponse(
+                content={"success": False, "detail": "File too large. Maximum size is 10MB."},
+                status_code=400
+            )
+
+        # Analyze face
+        print(f"Analyzing image: {len(contents)} bytes")
+        analyzer = get_face_analyzer()
+        features = analyzer.analyze_from_bytes(contents)
+
+        if features is None:
+            return JSONResponse(
+                content={"success": False, "detail": translations.get("error_no_face", "No face detected")},
+                status_code=400
+            )
+
+        print(f"Face analyzed: shape={features.face_shape}, eye={features.eye_type}")
+
+        # Get region from language if not specified
+        if not region:
+            lang_info = SUPPORTED_LANGUAGES.get(lang, {})
+            region = lang_info.get("region")
+
+        # Match to gods
+        matches = match_face_to_god(features, region=region, top_n=5)
+
+        if not matches:
+            return JSONResponse(
+                content={"success": False, "detail": translations.get("error_generic", "Something went wrong")},
+                status_code=500
+            )
+
+        primary_match = matches[0]
+        print(f"Matched to: {primary_match.god.id} with score {primary_match.match_score}")
+
+        # Generate result image (optional - may fail without proper templates)
+        result_image_base64 = None
+        try:
+            import numpy as np
+            import cv2
+
+            nparr = np.frombuffer(contents, np.uint8)
+            source_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+            if source_image is not None:
+                swapper = get_face_swapper()
+                result_image = swapper.swap_face(source_image, primary_match.god.id)
+                if result_image is not None:
+                    result_image_base64 = convert_to_base64(result_image)
+        except Exception as e:
+            print(f"Image processing error: {e}")
+
+        # Generate unique result ID
+        result_id = str(uuid.uuid4())[:8]
+
+        # Prepare response
+        response_data = {
+            "success": True,
+            "result_id": result_id,
+            "primary_match": {
+                "god_id": primary_match.god.id,
+                "god_name": primary_match.god.id.replace("_", " ").title(),
+                "culture": primary_match.god.culture.value,
+                "archetype": primary_match.god.archetype.value,
+                "element": primary_match.god.element,
+                "domain": primary_match.god.domain,
+                "symbol": primary_match.god.symbol,
+                "color": primary_match.god.color,
+                "match_score": round(primary_match.match_score * 100),
+                "reasoning": primary_match.reasoning,
+            },
+            "other_matches": [
+                {
+                    "god_id": m.god.id,
+                    "god_name": m.god.id.replace("_", " ").title(),
+                    "culture": m.god.culture.value,
+                    "match_score": round(m.match_score * 100),
+                }
+                for m in matches[1:]
+            ],
+            "face_analysis": {
+                "face_shape": features.face_shape,
+                "eye_type": features.eye_type,
+                "symmetry": round(features.symmetry_score * 100),
+                "intensity": round(features.intensity_level * 100),
+            },
+            "result_image": result_image_base64,
+            "usage_count": usage_count + 1,
+        }
+
+        # Create response and update usage cookie
+        response = JSONResponse(content=response_data)
+        new_count = usage_count + 1
+        response.set_cookie(key="face_swap_count", value=str(new_count), max_age=86400, path="/")  # 24 hours
+
+        # Reset ad_watched after use (require new ad for next time)
+        if ad_watched:
+            response.set_cookie(key="ad_watched", value="0", max_age=0, path="/")
+
+        return response
+
     except Exception as e:
-        print(f"Image processing error: {e}")
-
-    # Generate unique result ID
-    result_id = str(uuid.uuid4())[:8]
-
-    # Prepare response
-    response_data = {
-        "success": True,
-        "result_id": result_id,
-        "primary_match": {
-            "god_id": primary_match.god.id,
-            "god_name": primary_match.god.id.replace("_", " ").title(),
-            "culture": primary_match.god.culture.value,
-            "archetype": primary_match.god.archetype.value,
-            "element": primary_match.god.element,
-            "domain": primary_match.god.domain,
-            "symbol": primary_match.god.symbol,
-            "color": primary_match.god.color,
-            "match_score": round(primary_match.match_score * 100),
-            "reasoning": primary_match.reasoning,
-        },
-        "other_matches": [
-            {
-                "god_id": m.god.id,
-                "god_name": m.god.id.replace("_", " ").title(),
-                "culture": m.god.culture.value,
-                "match_score": round(m.match_score * 100),
-            }
-            for m in matches[1:]
-        ],
-        "face_analysis": {
-            "face_shape": features.face_shape,
-            "eye_type": features.eye_type,
-            "symmetry": round(features.symmetry_score * 100),
-            "intensity": round(features.intensity_level * 100),
-        },
-        "result_image": result_image_base64,
-        "usage_count": usage_count + 1,
-    }
-
-    # Create response and update usage cookie
-    response = JSONResponse(content=response_data)
-    new_count = usage_count + 1
-    response.set_cookie(key="face_swap_count", value=str(new_count), max_age=86400, path="/")  # 24 hours
-
-    # Reset ad_watched after use (require new ad for next time)
-    if ad_watched:
-        response.set_cookie(key="ad_watched", value="0", max_age=0, path="/")
-
-    return response
+        error_msg = str(e)
+        print(f"Analyze error: {error_msg}")
+        traceback.print_exc()
+        return JSONResponse(
+            content={"success": False, "detail": translations.get("error_generic", "Something went wrong")},
+            status_code=500
+        )
 
 
 @app.get("/result/{result_id}", response_class=HTMLResponse)
@@ -613,8 +644,28 @@ Crawl-delay: 1
 # ============================================
 # Error Handlers
 # ============================================
+def is_api_request(request: Request) -> bool:
+    """Check if request expects JSON response."""
+    accept = request.headers.get("accept", "")
+    content_type = request.headers.get("content-type", "")
+    path = request.url.path
+
+    # API endpoints or JSON accept header
+    return (
+        path.startswith("/api/") or
+        path == "/analyze" or
+        "application/json" in accept or
+        "multipart/form-data" in content_type
+    )
+
+
 @app.exception_handler(404)
 async def not_found_handler(request: Request, exc):
+    if is_api_request(request):
+        return JSONResponse(
+            content={"success": False, "detail": "Not found"},
+            status_code=404
+        )
     context = get_base_context(request)
     context["error"] = "Page not found"
     return templates.TemplateResponse("error.html", context, status_code=404)
@@ -622,6 +673,33 @@ async def not_found_handler(request: Request, exc):
 
 @app.exception_handler(500)
 async def server_error_handler(request: Request, exc):
+    import traceback
+    error_detail = str(exc) if exc else "Unknown error"
+    print(f"500 Error on {request.url.path}: {error_detail}")
+    traceback.print_exc()
+
+    if is_api_request(request):
+        return JSONResponse(
+            content={"success": False, "detail": error_detail},
+            status_code=500
+        )
+    context = get_base_context(request)
+    context["error"] = "Internal server error"
+    return templates.TemplateResponse("error.html", context, status_code=500)
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    import traceback
+    error_detail = str(exc)
+    print(f"Unhandled Exception on {request.url.path}: {error_detail}")
+    traceback.print_exc()
+
+    if is_api_request(request):
+        return JSONResponse(
+            content={"success": False, "detail": error_detail},
+            status_code=500
+        )
     context = get_base_context(request)
     context["error"] = "Internal server error"
     return templates.TemplateResponse("error.html", context, status_code=500)
