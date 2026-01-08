@@ -311,8 +311,10 @@ async def analyze_face(
         primary_match = matches[0]
         print(f"Matched to: {primary_match.god.id} with score {primary_match.match_score}")
 
-        # Generate result image (optional - may fail without proper templates)
+        # Generate result image (face swap or fallback to character image)
         result_image_base64 = None
+        character_image_url = None
+
         try:
             import numpy as np
             import cv2
@@ -327,6 +329,13 @@ async def analyze_face(
                     result_image_base64 = convert_to_base64(result_image)
         except Exception as e:
             print(f"Image processing error: {e}")
+
+        # Always provide character image URL as fallback
+        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+            img_path = STATIC_DIR / "images" / "gods" / f"{primary_match.god.id}{ext}"
+            if img_path.exists():
+                character_image_url = f"/static/images/gods/{primary_match.god.id}{ext}"
+                break
 
         # Generate unique result ID
         result_id = str(uuid.uuid4())[:8]
@@ -363,6 +372,7 @@ async def analyze_face(
                 "intensity": round(features.intensity_level * 100),
             },
             "result_image": result_image_base64,
+            "character_image_url": character_image_url,
             "usage_count": usage_count + 1,
         }
 
