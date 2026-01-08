@@ -67,6 +67,66 @@ def load_translations(lang: str) -> dict:
         return {}
 
 
+# Cache for character translations
+_character_translations_cache: dict[str, dict] = {}
+
+
+def load_character_translations(lang: str) -> dict:
+    """Load character translations for a given language."""
+    if lang in _character_translations_cache:
+        return _character_translations_cache[lang]
+
+    # Try to load language-specific translations
+    char_file = LOCALES_DIR / "characters" / f"{lang}.json"
+    if char_file.exists():
+        try:
+            with open(char_file, 'r', encoding='utf-8') as f:
+                translations = json.load(f)
+                _character_translations_cache[lang] = translations
+                return translations
+        except Exception:
+            pass
+
+    return {}
+
+
+def get_translated_character(character, lang: str) -> dict:
+    """Get character data with translations for the current language."""
+    # For Korean and English, use the built-in fields
+    if lang in ["ko", "en"]:
+        return {
+            "id": character.id,
+            "name": character.name_ko if lang == "ko" else character.name_en,
+            "name_alt": character.name_en if lang == "ko" else character.name_ko,
+            "tagline": character.tagline_ko if lang == "ko" else character.tagline_en,
+            "description": character.description_ko if lang == "ko" else character.description_en,
+            "traits": character.traits_ko if lang == "ko" else character.traits_en,
+            "story": character.story_ko if lang == "ko" else character.story_en,
+            "match_message": character.match_message_ko if lang == "ko" else character.match_message_en,
+            "aliases": character.aliases,
+            "era": character.era,
+            "related_characters": character.related_characters,
+        }
+
+    # For other languages, try to load translations
+    translations = load_character_translations(lang)
+    char_trans = translations.get(character.id, {})
+
+    return {
+        "id": character.id,
+        "name": char_trans.get(f"name_{lang}", character.name_en),
+        "name_alt": character.name_en,  # Always show English as alternative
+        "tagline": char_trans.get(f"tagline_{lang}", character.tagline_en),
+        "description": char_trans.get(f"description_{lang}", character.description_en),
+        "traits": char_trans.get(f"traits_{lang}", character.traits_en),
+        "story": char_trans.get(f"story_{lang}", character.story_en),
+        "match_message": char_trans.get(f"match_message_{lang}", character.match_message_en),
+        "aliases": character.aliases,
+        "era": character.era,
+        "related_characters": character.related_characters,
+    }
+
+
 def get_user_language(request: Request) -> str:
     """Get user's preferred language from cookie or Accept-Language header."""
     # Check cookie first
@@ -310,14 +370,17 @@ async def character_browser(request: Request, category: Optional[str] = None):
     if category:
         try:
             cat_enum = CharacterCategory(category)
-            characters = get_characters_by_category(cat_enum)
+            characters_raw = get_characters_by_category(cat_enum)
         except ValueError:
-            characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+            characters_raw = list(ALL_CHARACTER_DESCRIPTIONS.values())
     else:
-        characters = list(ALL_CHARACTER_DESCRIPTIONS.values())
+        characters_raw = list(ALL_CHARACTER_DESCRIPTIONS.values())
+
+    # Translate characters
+    characters = [get_translated_character(c, lang) for c in characters_raw]
 
     # Sort characters by name
-    characters.sort(key=lambda c: c.name_ko if lang == "ko" else c.name_en)
+    characters.sort(key=lambda c: c["name"])
 
     context["characters"] = characters
     context["categories"] = categories_data
@@ -331,11 +394,15 @@ async def character_browser(request: Request, category: Optional[str] = None):
 @app.get("/character/{char_id}", response_class=HTMLResponse)
 async def character_detail(request: Request, char_id: str):
     """Display detailed character information."""
-    character = get_character_description(char_id)
-    if not character:
+    character_raw = get_character_description(char_id)
+    if not character_raw:
         raise HTTPException(status_code=404, detail="Character not found")
 
     context = get_base_context(request)
+    lang = context["lang"]
+
+    # Translate character
+    character = get_translated_character(character_raw, lang)
     context["character"] = character
 
     # Get category info
@@ -348,12 +415,12 @@ async def character_detail(request: Request, char_id: str):
         }
 
     # Get related characters if any
-    if character.related_characters:
+    if character_raw.related_characters:
         related = []
-        for rel_id in character.related_characters[:5]:  # Limit to 5
+        for rel_id in character_raw.related_characters[:5]:  # Limit to 5
             rel_char = get_character_description(rel_id)
             if rel_char:
-                related.append(rel_char)
+                related.append(get_translated_character(rel_char, lang))
         context["related_characters"] = related
 
     return templates.TemplateResponse("character_detail.html", context)

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ character.name_ko if lang == "ko" else character.name_en }} - {{ t.app_name }}{% endblock %}
+{% block title %}{{ character.name }} - {{ t.app_name }}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-6 py-12">
@@ -23,15 +23,15 @@
             <div class="text-center mb-10">
                 <!-- Character Avatar -->
                 <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center text-4xl font-mythical text-gold border-2 border-gold/50 shadow-lg">
-                    {{ (character.name_ko[0] if lang == "ko" else character.name_en[0]) | upper }}
+                    {{ character.name[0] | upper }}
                 </div>
 
                 <!-- Names -->
                 <h1 class="font-mythical text-4xl text-gold mb-2">
-                    {{ character.name_ko if lang == "ko" else character.name_en }}
+                    {{ character.name }}
                 </h1>
                 <p class="text-xl text-gray-400 mb-4">
-                    {{ character.name_en if lang == "ko" else character.name_ko }}
+                    {{ character.name_alt }}
                 </p>
 
                 <!-- Category Badge -->
@@ -50,7 +50,7 @@
             <!-- Tagline -->
             <div class="text-center mb-10">
                 <p class="text-xl text-gray-300 italic border-l-4 border-gold pl-4 text-left max-w-2xl mx-auto">
-                    "{{ character.tagline_ko if lang == "ko" else character.tagline_en }}"
+                    "{{ character.tagline }}"
                 </p>
             </div>
 
@@ -61,8 +61,7 @@
                     {{ t.characters_personality }}
                 </h2>
                 <div class="flex flex-wrap gap-3">
-                    {% set traits = character.traits_ko if lang == "ko" else character.traits_en %}
-                    {% for trait in traits %}
+                    {% for trait in character.traits %}
                     <span class="px-4 py-2 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 text-gold border border-gold/30">
                         {{ trait }}
                     </span>
@@ -77,8 +76,7 @@
                     {{ t.characters_about }}
                 </h2>
                 <div class="prose prose-invert max-w-none">
-                    {% set description = character.description_ko if lang == "ko" else character.description_en %}
-                    {% for paragraph in description.split('\n\n') %}
+                    {% for paragraph in character.description.split('\n\n') %}
                     <p class="text-gray-300 leading-relaxed mb-4">{{ paragraph }}</p>
                     {% endfor %}
                 </div>
@@ -92,7 +90,7 @@
                 </h2>
                 <div class="card-mythical p-6 bg-gradient-to-br from-white/5 to-transparent">
                     <p class="text-gray-300 leading-relaxed">
-                        {{ character.story_ko if lang == "ko" else character.story_en }}
+                        {{ character.story }}
                     </p>
                 </div>
             </div>
@@ -105,7 +103,7 @@
                 </h2>
                 <div class="card-mythical p-6 border-gold/40 bg-gradient-to-br from-gold/10 to-transparent">
                     <p class="text-gray-200 leading-relaxed">
-                        {{ character.match_message_ko if lang == "ko" else character.match_message_en }}
+                        {{ character.match_message }}
                     </p>
                 </div>
             </div>
@@ -138,10 +136,10 @@
                     {% for rel in related_characters %}
                     <a href="/character/{{ rel.id }}" class="card-mythical p-4 text-center hover:glow-gold transition-all group">
                         <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gold/10 flex items-center justify-center text-lg font-mythical text-gold border border-gold/20">
-                            {{ (rel.name_ko[0] if lang == "ko" else rel.name_en[0]) | upper }}
+                            {{ rel.name[0] | upper }}
                         </div>
                         <p class="text-sm text-gray-300 group-hover:text-gold transition-colors truncate">
-                            {{ rel.name_ko if lang == "ko" else rel.name_en }}
+                            {{ rel.name }}
                         </p>
                     </a>
                     {% endfor %}
