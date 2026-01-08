@@ -66,6 +66,7 @@
   "error_no_face": "No face detected. Please try another photo.",
   "error_upload": "Upload error. Please try again.",
   "error_generic": "Something went wrong. Please try again.",
+  "error_timeout": "Analysis timed out. Please try again.",
   "error_ad_required": "Please watch an ad to continue using the service.",
 
   "ad_modal_title": "Watch Ad to Continue",

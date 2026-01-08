@@ -335,11 +335,18 @@ async function performAnalysis() {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
+
     try {
         const response = await fetch('/analyze', {
             method: 'POST',
-            body: formData
+            body: formData,
+            signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
 
         const data = await response.json();
 
@@ -360,10 +367,16 @@ async function performAnalysis() {
             alert(data.detail || data.message || translations.error_generic);
         }
     } catch (error) {
+        clearTimeout(timeoutId);
         stopProgressAnimation();
         loadingOverlay.classList.add('hidden');
-        alert(translations.error_generic);
-        console.error(error);
+
+        if (error.name === 'AbortError') {
+            alert(translations.error_timeout || 'Analysis timed out. Please try again.');
+        } else {
+            alert(translations.error_generic || 'Something went wrong. Please try again.');
+        }
+        console.error('Analysis error:', error);
     }
 }
 

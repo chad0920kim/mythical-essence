@@ -66,6 +66,7 @@
   "error_no_face": "얼굴을 감지할 수 없습니다. 다른 사진을 시도해주세요.",
   "error_upload": "업로드 중 오류가 발생했습니다. 다시 시도해주세요.",
   "error_generic": "문제가 발생했습니다. 다시 시도해주세요.",
+  "error_timeout": "분석 시간이 초과되었습니다. 다시 시도해주세요.",
   "error_ad_required": "계속 이용하려면 광고를 시청해주세요.",
 
   "ad_modal_title": "광고 시청",
