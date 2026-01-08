@@ -27,7 +27,7 @@
                 <div id="uploadZone" class="upload-zone rounded-xl p-12 text-center cursor-pointer transition-all">
                     <div id="uploadContent">
                         <div class="text-6xl mb-4">📸</div>
-                        <button type="button" class="btn-mythical mb-4" onclick="document.getElementById('fileInput').click()">
+                        <button type="button" class="btn-mythical mb-4" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">
                             {{ t.upload_button }}
                         </button>
                         <p class="text-gray-400">{{ t.upload_drag }}</p>
