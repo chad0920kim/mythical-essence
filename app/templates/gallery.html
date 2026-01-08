@@ -25,7 +25,8 @@
     <!-- Gods Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {% for god in gods %}
-        <a href="/god/{{ god.id }}" class="card-mythical p-4 hover:glow-gold transition-all group">
+        <div class="card-mythical p-4 hover:glow-gold transition-all group cursor-pointer"
+             onclick="showImageModal('/static/images/gods/{{ god.id }}.png', '{{ god.id.replace('_', ' ') | title }}', '{{ t.cultures[god.culture.value] if god.culture.value in t.cultures else god.culture.value | title }}', '/god/{{ god.id }}')">
             <div class="aspect-square rounded-lg mb-3 overflow-hidden"
                  style="background: linear-gradient(135deg, {{ god.color }}22 0%, {{ god.color }}11 100%);">
                 <img src="/static/images/gods/{{ god.id }}.png"
@@ -39,7 +40,7 @@
             <p class="text-xs text-gray-400">
                 {{ t.cultures[god.culture.value] if god.culture.value in t.cultures else god.culture.value | title }}
             </p>
-        </a>
+        </div>
         {% endfor %}
     </div>
 
@@ -49,4 +50,70 @@
     </div>
     {% endif %}
 </div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden" onclick="closeImageModal(event)">
+    <div class="relative max-w-2xl w-full mx-4 p-4">
+        <button onclick="closeImageModal()" class="absolute top-0 right-0 -mt-12 text-white/70 hover:text-white text-3xl font-light z-10">&times;</button>
+        <div class="card-mythical p-4 text-center" onclick="event.stopPropagation()">
+            <img id="modalImage" src="" alt="" class="max-w-full max-h-[60vh] mx-auto rounded-lg shadow-2xl">
+            <h3 id="modalTitle" class="font-mythical text-2xl text-gold mt-4"></h3>
+            <p id="modalTagline" class="text-gray-400 mt-2"></p>
+            <a id="modalLink" href="#" class="inline-block mt-4 px-6 py-2 bg-gold/20 border border-gold/50 rounded-full text-gold hover:bg-gold/30 transition-colors">
+                {{ t.view_details if 'view_details' in t else 'View Details' }}
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" onclick="scrollToTop()"
+        class="fixed bottom-6 right-6 w-12 h-12 bg-gold/20 border border-gold/50 rounded-full text-gold hover:bg-gold/30 transition-all opacity-0 pointer-events-none z-40 flex items-center justify-center shadow-lg"
+        title="Scroll to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+</button>
+
+<script>
+// Image Modal
+function showImageModal(imageSrc, title, tagline, detailLink) {
+    const modal = document.getElementById('imageModal');
+    document.getElementById('modalImage').src = imageSrc;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalTagline').textContent = tagline;
+    document.getElementById('modalLink').href = detailLink;
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    const modal = document.getElementById('imageModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
+
+// Scroll to Top
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', function() {
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    if (window.scrollY > 300) {
+        scrollBtn.classList.remove('opacity-0', 'pointer-events-none');
+        scrollBtn.classList.add('opacity-100');
+    } else {
+        scrollBtn.classList.add('opacity-0', 'pointer-events-none');
+        scrollBtn.classList.remove('opacity-100');
+    }
+});
+</script>
 {% endblock %}

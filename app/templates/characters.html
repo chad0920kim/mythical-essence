@@ -105,6 +105,15 @@
     </div>
 </div>
 
+<!-- Scroll to Top Button -->
+<button id="scrollTopBtn" onclick="scrollToTop()"
+        class="fixed bottom-6 right-6 w-12 h-12 bg-gold/20 border border-gold/50 rounded-full text-gold hover:bg-gold/30 transition-all opacity-0 pointer-events-none z-40 flex items-center justify-center shadow-lg"
+        title="Scroll to top">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+    </svg>
+</button>
+
 <style>
     .line-clamp-2 {
         display: -webkit-box;
@@ -144,6 +153,22 @@ function closeImageModal(event) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeImageModal();
+    }
+});
+
+// Scroll to Top
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', function() {
+    const scrollBtn = document.getElementById('scrollTopBtn');
+    if (window.scrollY > 300) {
+        scrollBtn.classList.remove('opacity-0', 'pointer-events-none');
+        scrollBtn.classList.add('opacity-100');
+    } else {
+        scrollBtn.classList.add('opacity-0', 'pointer-events-none');
+        scrollBtn.classList.remove('opacity-100');
     }
 });
 </script>
