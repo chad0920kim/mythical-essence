@@ -233,29 +233,13 @@ async def analyze_face(
     file: UploadFile = File(...),
     region: Optional[str] = Form(None)
 ):
-    """Analyze uploaded face and return matching god."""
+    """Analyze uploaded face and return top 3 matching characters (without face swap)."""
     import traceback
 
     lang = get_user_language(request)
     translations = load_translations(lang)
 
     try:
-        # Check usage limits
-        usage_count = get_usage_count(request)
-        ad_watched = get_ad_watched(request)
-
-        # If exceeded free limit and haven't watched ad, require ad
-        if usage_count >= FREE_FACE_SWAP_COUNT and not ad_watched:
-            return JSONResponse(
-                content={
-                    "success": False,
-                    "require_ad": True,
-                    "message": translations.get("error_ad_required", "Please watch an ad to continue"),
-                    "usage_count": usage_count,
-                },
-                status_code=402  # Payment Required
-            )
-
         # Validate file
         if not file.filename:
             return JSONResponse(
@@ -299,8 +283,8 @@ async def analyze_face(
             lang_info = SUPPORTED_LANGUAGES.get(lang, {})
             region = lang_info.get("region")
 
-        # Match to gods
-        matches = match_face_to_god(features, region=region, top_n=5)
+        # Match to gods - get top 3
+        matches = match_face_to_god(features, region=region, top_n=3)
 
         if not matches:
             return JSONResponse(
@@ -308,80 +292,149 @@ async def analyze_face(
                 status_code=500
             )
 
-        primary_match = matches[0]
-        print(f"Matched to: {primary_match.god.id} with score {primary_match.match_score}")
-
-        # Generate result image (face swap or fallback to character image)
-        result_image_base64 = None
-        character_image_url = None
-
-        try:
-            import numpy as np
-            import cv2
-
-            nparr = np.frombuffer(contents, np.uint8)
-            source_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
-            if source_image is not None:
-                swapper = get_face_swapper()
-                result_image = swapper.swap_face(source_image, primary_match.god.id)
-                if result_image is not None:
-                    result_image_base64 = convert_to_base64(result_image)
-        except Exception as e:
-            print(f"Image processing error: {e}")
-
-        # Always provide character image URL as fallback
-        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
-            img_path = STATIC_DIR / "images" / "gods" / f"{primary_match.god.id}{ext}"
-            if img_path.exists():
-                character_image_url = f"/static/images/gods/{primary_match.god.id}{ext}"
-                break
-
-        # Generate unique result ID
+        # Generate unique result ID for session tracking
         result_id = str(uuid.uuid4())[:8]
+
+        # Store uploaded image temporarily for face swap later
+        temp_image_path = UPLOADS_DIR / f"{result_id}.jpg"
+        with open(temp_image_path, "wb") as f:
+            f.write(contents)
+
+        # Helper function to get character image URL
+        def get_character_image_url(god_id: str) -> str:
+            for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+                img_path = STATIC_DIR / "images" / "gods" / f"{god_id}{ext}"
+                if img_path.exists():
+                    return f"/static/images/gods/{god_id}{ext}"
+            return ""
+
+        # Prepare top 3 matches
+        top_matches = []
+        for m in matches:
+            top_matches.append({
+                "god_id": m.god.id,
+                "god_name": m.god.id.replace("_", " ").title(),
+                "culture": m.god.culture.value,
+                "archetype": m.god.archetype.value,
+                "element": m.god.element,
+                "domain": m.god.domain,
+                "symbol": m.god.symbol,
+                "color": m.god.color,
+                "match_score": round(m.match_score * 100),
+                "reasoning": m.reasoning,
+                "character_image_url": get_character_image_url(m.god.id),
+            })
+
+        print(f"Top matches: {[m['god_id'] for m in top_matches]}")
 
         # Prepare response
         response_data = {
             "success": True,
             "result_id": result_id,
-            "primary_match": {
-                "god_id": primary_match.god.id,
-                "god_name": primary_match.god.id.replace("_", " ").title(),
-                "culture": primary_match.god.culture.value,
-                "archetype": primary_match.god.archetype.value,
-                "element": primary_match.god.element,
-                "domain": primary_match.god.domain,
-                "symbol": primary_match.god.symbol,
-                "color": primary_match.god.color,
-                "match_score": round(primary_match.match_score * 100),
-                "reasoning": primary_match.reasoning,
-            },
-            "other_matches": [
-                {
-                    "god_id": m.god.id,
-                    "god_name": m.god.id.replace("_", " ").title(),
-                    "culture": m.god.culture.value,
-                    "match_score": round(m.match_score * 100),
-                }
-                for m in matches[1:]
-            ],
+            "matches": top_matches,
             "face_analysis": {
                 "face_shape": features.face_shape,
                 "eye_type": features.eye_type,
                 "symmetry": round(features.symmetry_score * 100),
                 "intensity": round(features.intensity_level * 100),
             },
+        }
+
+        return JSONResponse(content=response_data)
+
+    except Exception as e:
+        error_msg = str(e)
+        print(f"Analyze error: {error_msg}")
+        traceback.print_exc()
+        return JSONResponse(
+            content={"success": False, "detail": translations.get("error_generic", "Something went wrong")},
+            status_code=500
+        )
+
+
+@app.post("/api/swap-face")
+async def swap_face_endpoint(
+    request: Request,
+    result_id: str = Form(...),
+    god_id: str = Form(...)
+):
+    """Perform face swap for selected character (requires ad watched)."""
+    import traceback
+
+    lang = get_user_language(request)
+    translations = load_translations(lang)
+
+    try:
+        # Check if ad was watched
+        ad_watched = get_ad_watched(request)
+        usage_count = get_usage_count(request)
+
+        if not ad_watched and usage_count >= FREE_FACE_SWAP_COUNT:
+            return JSONResponse(
+                content={
+                    "success": False,
+                    "require_ad": True,
+                    "message": translations.get("error_ad_required", "Please watch an ad to continue"),
+                },
+                status_code=402
+            )
+
+        # Find the temporarily stored image
+        temp_image_path = UPLOADS_DIR / f"{result_id}.jpg"
+        if not temp_image_path.exists():
+            return JSONResponse(
+                content={"success": False, "detail": translations.get("error_session_expired", "Session expired. Please upload again.")},
+                status_code=400
+            )
+
+        # Read the stored image
+        with open(temp_image_path, "rb") as f:
+            contents = f.read()
+
+        # Perform face swap
+        import numpy as np
+        import cv2
+
+        nparr = np.frombuffer(contents, np.uint8)
+        source_image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        result_image_base64 = None
+        character_image_url = None
+
+        if source_image is not None:
+            swapper = get_face_swapper()
+            result_image = swapper.swap_face(source_image, god_id)
+            if result_image is not None:
+                result_image_base64 = convert_to_base64(result_image)
+                print(f"Face swap successful for {god_id}")
+
+        # Get character image URL as fallback
+        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+            img_path = STATIC_DIR / "images" / "gods" / f"{god_id}{ext}"
+            if img_path.exists():
+                character_image_url = f"/static/images/gods/{god_id}{ext}"
+                break
+
+        # Clean up temporary file
+        try:
+            temp_image_path.unlink()
+        except Exception:
+            pass
+
+        # Prepare response
+        response_data = {
+            "success": True,
+            "god_id": god_id,
             "result_image": result_image_base64,
             "character_image_url": character_image_url,
-            "usage_count": usage_count + 1,
         }
 
         # Create response and update usage cookie
         response = JSONResponse(content=response_data)
         new_count = usage_count + 1
-        response.set_cookie(key="face_swap_count", value=str(new_count), max_age=86400, path="/")  # 24 hours
+        response.set_cookie(key="face_swap_count", value=str(new_count), max_age=86400, path="/")
 
-        # Reset ad_watched after use (require new ad for next time)
+        # Reset ad_watched after use
         if ad_watched:
             response.set_cookie(key="ad_watched", value="0", max_age=0, path="/")
 
@@ -389,7 +442,7 @@ async def analyze_face(
 
     except Exception as e:
         error_msg = str(e)
-        print(f"Analyze error: {error_msg}")
+        print(f"Face swap error: {error_msg}")
         traceback.print_exc()
         return JSONResponse(
             content={"success": False, "detail": translations.get("error_generic", "Something went wrong")},

@@ -75,6 +75,40 @@ class Archetype(Enum):
     CAREGIVER = "caregiver"
 
 
+class FortuneType(Enum):
+    """관상학 종합 분류 (Overall Fortune Classification)."""
+    LEADER = "leader"      # 리더상 - 왕, 지도자
+    SCHOLAR = "scholar"    # 학자상 - 현자, 지식인
+    WARRIOR = "warrior"    # 무관상 - 전사, 장군
+    ARTIST = "artist"      # 예술가상 - 창작자, 미의 신
+    MERCHANT = "merchant"  # 상인상 - 재물신, 상업신
+
+
+class EyeShapeType(Enum):
+    """관상학 눈 형태 (Physiognomy Eye Shape)."""
+    PHOENIX = "phoenix"  # 봉황눈 - 크고 날카로운
+    TIGER = "tiger"      # 호랑이눈 - 날카롭고 강인한
+    DEER = "deer"        # 사슴눈 - 크고 순한
+    DRAGON = "dragon"    # 용눈 - 깊고 위엄있는
+
+
+@dataclass
+class PhysiognomyPreference:
+    """관상학 기반 매칭 선호도."""
+    # 선호하는 관상 유형
+    preferred_fortunes: list[FortuneType]  # 어울리는 관상 유형
+
+    # 눈 형태 선호
+    preferred_eye_shapes: list[EyeShapeType]
+
+    # 특징 선호도 (0-1, 높을수록 해당 특징 선호)
+    forehead_preference: float  # 이마 발달 선호 (높으면 지혜로운 이마 선호)
+    nose_preference: float      # 코 높이 선호 (높으면 높은 코 선호)
+    jaw_preference: float       # 턱 발달 선호 (높으면 강한 턱 선호)
+    cheekbone_preference: float # 광대뼈 선호 (높으면 돌출된 광대 선호)
+    eye_spirit_preference: float # 눈 정기 선호 (높으면 빛나는 눈 선호)
+
+
 @dataclass
 class God:
     """God/Deity data model."""
@@ -97,6 +131,9 @@ class God:
 
     # Image template
     image_file: Optional[str] = None
+
+    # 관상학 선호도 (Physiognomy preferences)
+    physiognomy_pref: Optional[PhysiognomyPreference] = None
 
 
 # Comprehensive Gods Database

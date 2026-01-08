@@ -129,42 +129,56 @@
         </div>
     </div>
 
-    <!-- Result Modal -->
+    <!-- Result Modal - Character Selection -->
     <div id="resultModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden overflow-y-auto py-8">
-        <div class="card-mythical max-w-2xl w-full mx-4 p-8">
-            <h2 class="font-mythical text-3xl text-center text-gold mb-8">
+        <div class="card-mythical max-w-4xl w-full mx-4 p-8">
+            <h2 class="font-mythical text-3xl text-center text-gold mb-4">
                 {{ t.result_title }}
             </h2>
+            <p class="text-center text-gray-400 mb-8">
+                {{ t.result_select_character if t.result_select_character else "Select a character to create your fusion!" }}
+            </p>
 
-            <!-- Primary Match -->
-            <div id="primaryMatch" class="text-center mb-8">
+            <!-- Top 3 Matches Grid -->
+            <div id="matchesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- Filled by JavaScript -->
             </div>
 
-            <!-- Match Details -->
-            <div id="matchDetails" class="grid grid-cols-2 gap-4 mb-8">
+            <!-- Face Analysis Summary -->
+            <div id="faceAnalysisSummary" class="text-center text-gray-400 text-sm mb-6">
                 <!-- Filled by JavaScript -->
-            </div>
-
-            <!-- Analysis -->
-            <div id="analysisText" class="text-gray-300 text-center mb-8 italic">
-                <!-- Filled by JavaScript -->
-            </div>
-
-            <!-- Other Matches -->
-            <div id="otherMatches" class="mb-8">
-                <h3 class="font-mythical text-lg text-gold mb-4">{{ t.result_other_matches }}</h3>
-                <div id="otherMatchesList" class="flex gap-2 flex-wrap">
-                    <!-- Filled by JavaScript -->
-                </div>
             </div>
 
             <!-- Actions -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <button onclick="shareResult()" class="btn-mythical">
+                <button onclick="closeResult()" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                    🔄 {{ t.result_retry }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Face Swap Result Modal -->
+    <div id="swapResultModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden overflow-y-auto py-8">
+        <div class="card-mythical max-w-2xl w-full mx-4 p-8">
+            <h2 class="font-mythical text-3xl text-center text-gold mb-8">
+                {{ t.swap_result_title if t.swap_result_title else "Your Mythical Fusion" }}
+            </h2>
+
+            <!-- Swap Result Image -->
+            <div id="swapResultContent" class="text-center mb-8">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="shareSwapResult()" class="btn-mythical">
                     🔗 {{ t.result_share }}
                 </button>
-                <button onclick="closeResult()" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                <button onclick="downloadSwapResult()" class="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors">
+                    📥 {{ t.result_download if t.result_download else "Download" }}
+                </button>
+                <button onclick="closeSwapResult()" class="px-6 py-3 border border-gray-600 text-gray-400 rounded-full hover:bg-gray-800 transition-colors">
                     🔄 {{ t.result_retry }}
                 </button>
             </div>
@@ -187,10 +201,14 @@ const uploadForm = document.getElementById('uploadForm');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const loadingOverlay = document.getElementById('loadingOverlay');
 const resultModal = document.getElementById('resultModal');
+const swapResultModal = document.getElementById('swapResultModal');
 const adModal = document.getElementById('adModal');
 
 let selectedFile = null;
 let pendingAnalysis = false;  // Flag to retry after ad
+let currentResultId = null;   // Store result ID for face swap
+let selectedGodId = null;     // Store selected god ID for face swap
+let lastSwapResult = null;    // Store last swap result for download
 
 // Drag and drop handlers
 uploadZone.addEventListener('dragover', (e) => {
@@ -437,8 +455,12 @@ async function confirmAdWatched() {
         if (response.ok) {
             adModal.classList.add('hidden');
 
-            // Retry analysis if pending
-            if (pendingAnalysis && selectedFile) {
+            // If a character was selected, perform face swap
+            if (selectedGodId && currentResultId) {
+                await performFaceSwap();
+            }
+            // Legacy: Retry analysis if pending
+            else if (pendingAnalysis && selectedFile) {
                 pendingAnalysis = false;
                 await performAnalysis();
             }
@@ -449,67 +471,166 @@ async function confirmAdWatched() {
 }
 
 function showResult(data) {
-    const match = data.primary_match;
+    // Store result ID for face swap
+    currentResultId = data.result_id;
 
-    // Determine image source: result_image (base64) or character_image_url
-    let imageHtml;
-    if (data.result_image) {
-        imageHtml = `<img src="data:image/png;base64,${data.result_image}" alt="${match.god_name}" class="w-40 h-40 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-gold shadow-lg">`;
-    } else if (data.character_image_url) {
-        imageHtml = `<img src="${data.character_image_url}" alt="${match.god_name}" class="w-40 h-40 sm:w-48 sm:h-48 rounded-full object-cover border-4 border-gold shadow-lg">`;
-    } else {
-        imageHtml = `<div class="w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gray-800 flex items-center justify-center text-6xl border-4 border-gold">${getGodEmoji(match.archetype)}</div>`;
-    }
+    // Build character cards for top 3 matches
+    const matchesHtml = data.matches.map((match, index) => {
+        const cultureLabel = translations.cultures?.[match.culture] || match.culture;
+        const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
 
-    // Primary match display
-    document.getElementById('primaryMatch').innerHTML = `
-        <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500 to-yellow-700 mb-4">
-            ${imageHtml}
-        </div>
-        <h3 class="font-mythical text-2xl sm:text-3xl text-white mb-2">${match.god_name}</h3>
-        <div class="text-gold text-xl">${match.match_score}% ${translations.result_match}</div>
-    `;
+        // Determine image
+        let imageHtml;
+        if (match.character_image_url) {
+            imageHtml = `<img src="${match.character_image_url}" alt="${match.god_name}" class="w-32 h-32 rounded-full object-cover border-4 border-gold/50 group-hover:border-gold transition-all">`;
+        } else {
+            imageHtml = `<div class="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center text-5xl border-4 border-gold/50 group-hover:border-gold transition-all">${getGodEmoji(match.archetype)}</div>`;
+        }
 
-    // Match details
-    const cultureLabel = translations.cultures?.[match.culture] || match.culture;
-    const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
-    const elementLabel = translations.elements?.[match.element] || match.element;
+        // Ranking badge
+        const rankBadge = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
 
-    document.getElementById('matchDetails').innerHTML = `
-        <div class="card-mythical p-4 text-center">
-            <div class="text-gray-400 text-sm mb-1">${translations.result_culture}</div>
-            <div class="text-white">${cultureLabel}</div>
-        </div>
-        <div class="card-mythical p-4 text-center">
-            <div class="text-gray-400 text-sm mb-1">${translations.result_archetype}</div>
-            <div class="text-white">${archetypeLabel}</div>
-        </div>
-        <div class="card-mythical p-4 text-center">
-            <div class="text-gray-400 text-sm mb-1">${translations.result_element}</div>
-            <div class="text-white">${elementLabel}</div>
-        </div>
-        <div class="card-mythical p-4 text-center">
-            <div class="text-gray-400 text-sm mb-1">${translations.result_domain}</div>
-            <div class="text-white text-sm">${match.domain}</div>
-        </div>
-    `;
-
-    // Analysis text
-    document.getElementById('analysisText').innerHTML = `"${match.reasoning}"`;
-
-    // Other matches
-    const otherMatchesHtml = data.other_matches.map(m => {
-        const culture = translations.cultures?.[m.culture] || m.culture;
         return `
-            <div class="card-mythical px-4 py-2 text-sm">
-                <span class="text-white">${m.god_name}</span>
-                <span class="text-gray-400">(${m.match_score}%)</span>
+            <div class="card-mythical p-6 text-center cursor-pointer group hover:border-gold transition-all relative" onclick="selectCharacter('${match.god_id}', '${match.god_name}')">
+                <div class="absolute top-3 right-3 text-2xl">${rankBadge}</div>
+                <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500/20 to-yellow-700/20 mb-4 group-hover:from-yellow-500/40 group-hover:to-yellow-700/40 transition-all">
+                    ${imageHtml}
+                </div>
+                <h3 class="font-mythical text-xl text-white mb-2">${match.god_name}</h3>
+                <div class="text-gold text-lg mb-3">${match.match_score}% ${translations.result_match || 'Match'}</div>
+                <div class="text-gray-400 text-sm mb-2">${cultureLabel} · ${archetypeLabel}</div>
+                <p class="text-gray-500 text-xs line-clamp-2">${match.reasoning}</p>
+                <button class="btn-mythical mt-4 text-sm py-2 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    ✨ ${translations.select_character || 'Select'}
+                </button>
             </div>
         `;
     }).join('');
-    document.getElementById('otherMatchesList').innerHTML = otherMatchesHtml;
+
+    document.getElementById('matchesGrid').innerHTML = matchesHtml;
+
+    // Face analysis summary
+    const analysis = data.face_analysis;
+    document.getElementById('faceAnalysisSummary').innerHTML = `
+        ${translations.face_analysis_label || 'Your face analysis'}:
+        ${translations.face_shapes?.[analysis.face_shape] || analysis.face_shape} ·
+        ${translations.eye_types?.[analysis.eye_type] || analysis.eye_type} ·
+        ${translations.symmetry_label || 'Symmetry'}: ${analysis.symmetry}%
+    `;
 
     resultModal.classList.remove('hidden');
+}
+
+function selectCharacter(godId, godName) {
+    selectedGodId = godId;
+
+    // Show ad modal before face swap
+    showAdModal();
+}
+
+async function performFaceSwap() {
+    if (!currentResultId || !selectedGodId) {
+        alert('Please select a character first.');
+        return;
+    }
+
+    // Show loading
+    loadingOverlay.classList.remove('hidden');
+    document.getElementById('loadingTitle').textContent = translations.creating_fusion || 'Creating your fusion...';
+    document.getElementById('loadingMessage').textContent = translations.creating_fusion_msg || 'Merging your essence with the mythical...';
+    startProgressAnimation();
+
+    const formData = new FormData();
+    formData.append('result_id', currentResultId);
+    formData.append('god_id', selectedGodId);
+
+    try {
+        const response = await fetch('/api/swap-face', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        stopProgressAnimation();
+        loadingOverlay.classList.add('hidden');
+
+        if (data.success) {
+            showSwapResult(data);
+        } else if (data.require_ad) {
+            showAdModal();
+        } else {
+            alert(data.detail || data.message || translations.error_generic);
+        }
+    } catch (error) {
+        stopProgressAnimation();
+        loadingOverlay.classList.add('hidden');
+        alert(translations.error_generic || 'Something went wrong. Please try again.');
+        console.error('Face swap error:', error);
+    }
+}
+
+function showSwapResult(data) {
+    lastSwapResult = data;
+
+    // Determine image source
+    let imageHtml;
+    if (data.result_image) {
+        imageHtml = `<img id="swapResultImage" src="data:image/png;base64,${data.result_image}" alt="Your Fusion" class="max-w-md w-full rounded-2xl border-4 border-gold shadow-2xl">`;
+    } else if (data.character_image_url) {
+        imageHtml = `<img id="swapResultImage" src="${data.character_image_url}" alt="Character" class="max-w-md w-full rounded-2xl border-4 border-gold shadow-2xl">`;
+    } else {
+        imageHtml = `<div class="w-64 h-64 rounded-2xl bg-gray-800 flex items-center justify-center text-6xl border-4 border-gold">✨</div>`;
+    }
+
+    const godName = data.god_id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+    document.getElementById('swapResultContent').innerHTML = `
+        <div class="inline-block p-2 rounded-2xl bg-gradient-to-r from-yellow-500/30 to-yellow-700/30 mb-6">
+            ${imageHtml}
+        </div>
+        <h3 class="font-mythical text-2xl text-white mb-2">${translations.fusion_with || 'Your Fusion with'} ${godName}</h3>
+        <p class="text-gray-400">${translations.fusion_complete || 'The mythical transformation is complete!'}</p>
+    `;
+
+    // Hide result modal and show swap result
+    resultModal.classList.add('hidden');
+    swapResultModal.classList.remove('hidden');
+}
+
+function closeSwapResult() {
+    swapResultModal.classList.add('hidden');
+    resetUpload();
+    currentResultId = null;
+    selectedGodId = null;
+    lastSwapResult = null;
+}
+
+function shareSwapResult() {
+    if (navigator.share) {
+        navigator.share({
+            title: translations.app_name || 'MythFace',
+            text: translations.share_text || 'Check out my mythical fusion!',
+            url: window.location.href
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert(translations.link_copied || 'Link copied to clipboard!');
+    }
+}
+
+function downloadSwapResult() {
+    if (!lastSwapResult) return;
+
+    const link = document.createElement('a');
+    if (lastSwapResult.result_image) {
+        link.href = `data:image/png;base64,${lastSwapResult.result_image}`;
+        link.download = `mythface_${lastSwapResult.god_id}.png`;
+    } else if (lastSwapResult.character_image_url) {
+        link.href = lastSwapResult.character_image_url;
+        link.download = `mythface_${lastSwapResult.god_id}.png`;
+    }
+    link.click();
 }
 
 function getGodEmoji(archetype) {
