@@ -26,14 +26,12 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {% for god in gods %}
         <a href="/god/{{ god.id }}" class="card-mythical p-4 hover:glow-gold transition-all group">
-            <div class="aspect-square rounded-lg mb-3 flex items-center justify-center text-4xl"
+            <div class="aspect-square rounded-lg mb-3 overflow-hidden"
                  style="background: linear-gradient(135deg, {{ god.color }}22 0%, {{ god.color }}11 100%);">
-                {% set archetype_emojis = {
-                    'ruler': '👑', 'sage': '📚', 'hero': '⚔️', 'rebel': '🔥',
-                    'wizard': '🔮', 'lover': '💕', 'jester': '🎭', 'caregiver': '💝',
-                    'creator': '✨', 'innocent': '🌟', 'explorer': '🧭', 'everyman': '🤝'
-                } %}
-                {{ archetype_emojis[god.archetype.value] if god.archetype.value in archetype_emojis else '✦' }}
+                <img src="/static/images/gods/{{ god.id }}.png"
+                     alt="{{ god.id.replace('_', ' ') | title }}"
+                     class="w-full h-full object-cover"
+                     onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-4xl text-gold\'>✦</div>';">
             </div>
             <h3 class="font-mythical text-sm text-white group-hover:text-gold transition-colors truncate">
                 {{ god.id.replace('_', ' ') | title }}

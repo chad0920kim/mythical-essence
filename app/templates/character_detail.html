@@ -22,8 +22,11 @@
             <!-- Header Section -->
             <div class="text-center mb-10">
                 <!-- Character Avatar -->
-                <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center text-4xl font-mythical text-gold border-2 border-gold/50 shadow-lg">
-                    {{ character.name[0] | upper }}
+                <div class="w-28 h-28 mx-auto mb-6 rounded-full bg-gradient-to-br from-gold/30 to-gold/10 border-2 border-gold/50 shadow-lg overflow-hidden">
+                    <img src="/static/images/gods/{{ character.id }}.png"
+                         alt="{{ character.name }}"
+                         class="w-full h-full object-cover"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'flex items-center justify-center w-full h-full text-4xl font-mythical text-gold\'>{{ character.name[0] | upper }}</span>';">
                 </div>
 
                 <!-- Names -->
@@ -135,8 +138,11 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                     {% for rel in related_characters %}
                     <a href="/character/{{ rel.id }}" class="card-mythical p-4 text-center hover:glow-gold transition-all group">
-                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gold/10 flex items-center justify-center text-lg font-mythical text-gold border border-gold/20">
-                            {{ rel.name[0] | upper }}
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gold/10 border border-gold/20 overflow-hidden">
+                            <img src="/static/images/gods/{{ rel.id }}.png"
+                                 alt="{{ rel.name }}"
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'flex items-center justify-center w-full h-full text-lg font-mythical text-gold\'>{{ rel.name[0] | upper }}</span>';">
                         </div>
                         <p class="text-sm text-gray-300 group-hover:text-gold transition-colors truncate">
                             {{ rel.name }}
