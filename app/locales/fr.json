@@ -32,6 +32,7 @@
   "upload_formats": "Formats supportés: JPG, PNG, WebP (max 10Mo)",
   "upload_privacy": "Les images téléchargées sont supprimées immédiatement après l'analyse",
 
+  "analyze_button": "Analyser",
   "analyzing": "Analyse en cours...",
   "analyzing_message": "Recherche de votre essence dans le royaume des dieux",
 

@@ -32,6 +32,7 @@
   "upload_formats": "支持格式：JPG、PNG、WebP（最大10MB）",
   "upload_privacy": "上传的图片在分析后立即删除",
 
+  "analyze_button": "开始分析",
   "analyzing": "分析中...",
   "analyzing_message": "正在神话世界中寻找你的本质",
 

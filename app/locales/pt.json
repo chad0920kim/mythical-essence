@@ -32,6 +32,7 @@
   "upload_formats": "Formatos suportados: JPG, PNG, WebP (máx. 10MB)",
   "upload_privacy": "As imagens carregadas são excluídas imediatamente após a análise",
 
+  "analyze_button": "Analisar",
   "analyzing": "Analisando...",
   "analyzing_message": "Procurando sua essência no reino dos deuses",
 

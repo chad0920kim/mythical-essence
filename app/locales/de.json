@@ -32,6 +32,7 @@
   "upload_formats": "Unterstützte Formate: JPG, PNG, WebP (max. 10MB)",
   "upload_privacy": "Hochgeladene Bilder werden nach der Analyse sofort gelöscht",
 
+  "analyze_button": "Analysieren",
   "analyzing": "Analysiere...",
   "analyzing_message": "Wir suchen nach deinem Wesen im Reich der Götter",
 

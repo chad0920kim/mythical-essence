@@ -32,6 +32,7 @@
   "upload_formats": "Desteklenen formatlar: JPG, PNG, WebP (maks. 10MB)",
   "upload_privacy": "Yüklenen görüntüler analiz sonrası hemen silinir",
 
+  "analyze_button": "Analiz Et",
   "analyzing": "Analiz ediliyor...",
   "analyzing_message": "Tanrılar aleminde özünüz aranıyor",
 

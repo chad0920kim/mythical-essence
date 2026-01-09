@@ -32,6 +32,7 @@
   "upload_formats": "Định dạng hỗ trợ: JPG, PNG, WebP (tối đa 10MB)",
   "upload_privacy": "Ảnh tải lên sẽ bị xóa ngay sau khi phân tích",
 
+  "analyze_button": "Phân tích",
   "analyzing": "Đang phân tích...",
   "analyzing_message": "Đang tìm kiếm bản chất của bạn trong vương quốc của các vị thần",
 

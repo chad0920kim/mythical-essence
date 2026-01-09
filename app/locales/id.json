@@ -32,6 +32,7 @@
   "upload_formats": "Format yang didukung: JPG, PNG, WebP (maks. 10MB)",
   "upload_privacy": "Gambar yang diunggah akan dihapus segera setelah analisis",
 
+  "analyze_button": "Analisis",
   "analyzing": "Menganalisis...",
   "analyzing_message": "Mencari esensimu di alam para dewa",
 

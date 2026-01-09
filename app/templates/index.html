@@ -158,6 +158,12 @@
         </div>
     </div>
 
+    <!-- Image Preview Modal -->
+    <div id="imagePreviewModal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-[60] hidden" onclick="closeImagePreview()">
+        <button onclick="closeImagePreview()" class="absolute top-4 right-4 text-white text-3xl hover:text-gold transition-colors">&times;</button>
+        <img id="previewLargeImage" src="" alt="Preview" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg">
+    </div>
+
     <!-- Face Swap Result Modal -->
     <div id="swapResultModal" class="fixed inset-0 bg-black/90 flex items-center justify-center z-50 hidden overflow-y-auto py-8">
         <div class="card-mythical max-w-2xl w-full mx-4 p-8">
@@ -483,36 +489,36 @@ function showResult(data) {
 
         // Build character cards for top 3 matches
         const matchesHtml = data.matches.map((match, index) => {
-        const cultureLabel = translations.cultures?.[match.culture] || match.culture;
-        const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
+            const cultureLabel = translations.cultures?.[match.culture] || match.culture;
+            const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
 
-        // Determine image
-        let imageHtml;
-        if (match.character_image_url) {
-            imageHtml = `<img src="${match.character_image_url}" alt="${match.god_name}" class="w-32 h-32 rounded-full object-cover border-4 border-gold/50 group-hover:border-gold transition-all">`;
-        } else {
-            imageHtml = `<div class="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center text-5xl border-4 border-gold/50 group-hover:border-gold transition-all">${getGodEmoji(match.archetype)}</div>`;
-        }
+            // Determine image - clickable to show larger version
+            let imageHtml;
+            if (match.character_image_url) {
+                imageHtml = `<img src="${match.character_image_url}" alt="${match.god_name}" class="w-32 h-32 rounded-full object-cover border-4 border-gold/50 hover:border-gold transition-all cursor-zoom-in" onclick="event.stopPropagation(); showImagePreview('${match.character_image_url}')">`;
+            } else {
+                imageHtml = `<div class="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center text-5xl border-4 border-gold/50 hover:border-gold transition-all">${getGodEmoji(match.archetype)}</div>`;
+            }
 
-        // Ranking badge
-        const rankBadge = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+            // Ranking badge
+            const rankBadge = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
 
-        return `
-            <div class="card-mythical p-6 text-center cursor-pointer group hover:border-gold transition-all relative" onclick="selectCharacter('${match.god_id}', '${match.god_name}')">
-                <div class="absolute top-3 right-3 text-2xl">${rankBadge}</div>
-                <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500/20 to-yellow-700/20 mb-4 group-hover:from-yellow-500/40 group-hover:to-yellow-700/40 transition-all">
-                    ${imageHtml}
+            return `
+                <div class="card-mythical p-6 text-center group hover:border-gold transition-all relative">
+                    <div class="absolute top-3 right-3 text-2xl">${rankBadge}</div>
+                    <div class="inline-block p-1 rounded-full bg-gradient-to-r from-yellow-500/20 to-yellow-700/20 mb-4 group-hover:from-yellow-500/40 group-hover:to-yellow-700/40 transition-all">
+                        ${imageHtml}
+                    </div>
+                    <h3 class="font-mythical text-xl text-white mb-2">${match.god_name}</h3>
+                    <div class="text-gold text-lg mb-3">${match.match_score}% ${translations.result_match || 'Match'}</div>
+                    <div class="text-gray-400 text-sm mb-2">${cultureLabel} · ${archetypeLabel}</div>
+                    <p class="text-gray-500 text-xs line-clamp-2">${match.reasoning}</p>
+                    <button class="btn-mythical mt-4 text-sm py-2 px-4" onclick="selectCharacter('${match.god_id}', '${match.god_name}')">
+                        ✨ ${translations.select_character || 'Select'}
+                    </button>
                 </div>
-                <h3 class="font-mythical text-xl text-white mb-2">${match.god_name}</h3>
-                <div class="text-gold text-lg mb-3">${match.match_score}% ${translations.result_match || 'Match'}</div>
-                <div class="text-gray-400 text-sm mb-2">${cultureLabel} · ${archetypeLabel}</div>
-                <p class="text-gray-500 text-xs line-clamp-2">${match.reasoning}</p>
-                <button class="btn-mythical mt-4 text-sm py-2 px-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    ✨ ${translations.select_character || 'Select'}
-                </button>
-            </div>
-        `;
-    }).join('');
+            `;
+        }).join('');
 
     document.getElementById('matchesGrid').innerHTML = matchesHtml;
 
@@ -538,6 +544,17 @@ function selectCharacter(godId, godName) {
 
     // Show ad modal before face swap
     showAdModal();
+}
+
+function showImagePreview(imageUrl) {
+    const modal = document.getElementById('imagePreviewModal');
+    const img = document.getElementById('previewLargeImage');
+    img.src = imageUrl;
+    modal.classList.remove('hidden');
+}
+
+function closeImagePreview() {
+    document.getElementById('imagePreviewModal').classList.add('hidden');
 }
 
 async function performFaceSwap() {

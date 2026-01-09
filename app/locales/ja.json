@@ -32,6 +32,7 @@
   "upload_formats": "対応形式：JPG、PNG、WebP（最大10MB）",
   "upload_privacy": "アップロードされた画像は分析後すぐに削除されます",
 
+  "analyze_button": "分析する",
   "analyzing": "分析中...",
   "analyzing_message": "神々の世界であなたの本質を探しています",
 
