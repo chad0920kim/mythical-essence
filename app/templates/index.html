@@ -358,6 +358,7 @@ async function performAnalysis() {
     const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
     try {
+        console.log('Starting analysis...');
         const response = await fetch('/analyze', {
             method: 'POST',
             body: formData,
@@ -365,8 +366,10 @@ async function performAnalysis() {
         });
 
         clearTimeout(timeoutId);
+        console.log('Response received:', response.status);
 
         const data = await response.json();
+        console.log('Data parsed:', data);
 
         // Show completion
         updateProgress(100, '✅', translations.analyzing_complete || 'Analysis complete!', 3);
@@ -376,6 +379,7 @@ async function performAnalysis() {
         loadingOverlay.classList.add('hidden');
 
         if (data.success) {
+            console.log('Showing result with matches:', data.matches?.length);
             showResult(data);
         } else if (data.require_ad) {
             // Show ad modal
@@ -389,12 +393,12 @@ async function performAnalysis() {
         stopProgressAnimation();
         loadingOverlay.classList.add('hidden');
 
+        console.error('Analysis error:', error);
         if (error.name === 'AbortError') {
             alert(translations.error_timeout || 'Analysis timed out. Please try again.');
         } else {
-            alert(translations.error_generic || 'Something went wrong. Please try again.');
+            alert((translations.error_generic || 'Something went wrong.') + ' Error: ' + error.message);
         }
-        console.error('Analysis error:', error);
     }
 }
 
@@ -471,11 +475,14 @@ async function confirmAdWatched() {
 }
 
 function showResult(data) {
-    // Store result ID for face swap
-    currentResultId = data.result_id;
+    try {
+        console.log('showResult called with:', JSON.stringify(data).substring(0, 200));
 
-    // Build character cards for top 3 matches
-    const matchesHtml = data.matches.map((match, index) => {
+        // Store result ID for face swap
+        currentResultId = data.result_id;
+
+        // Build character cards for top 3 matches
+        const matchesHtml = data.matches.map((match, index) => {
         const cultureLabel = translations.cultures?.[match.culture] || match.culture;
         const archetypeLabel = translations.archetypes?.[match.archetype] || match.archetype;
 
@@ -518,7 +525,12 @@ function showResult(data) {
         ${translations.symmetry_label || 'Symmetry'}: ${analysis.symmetry}%
     `;
 
-    resultModal.classList.remove('hidden');
+        resultModal.classList.remove('hidden');
+        console.log('Result modal shown successfully');
+    } catch (error) {
+        console.error('Error in showResult:', error);
+        alert('Error displaying results: ' + error.message);
+    }
 }
 
 function selectCharacter(godId, godName) {
