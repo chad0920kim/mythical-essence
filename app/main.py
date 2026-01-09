@@ -561,36 +561,72 @@ async def character_browser(request: Request, category: Optional[str] = None):
 async def character_detail(request: Request, char_id: str, from_category: Optional[str] = None):
     """Display detailed character information."""
     character_raw = get_character_description(char_id)
-    if not character_raw:
-        raise HTTPException(status_code=404, detail="Character not found")
 
     context = get_base_context(request)
     lang = context["lang"]
 
-    # Translate character
-    character = get_translated_character(character_raw, lang)
-    context["character"] = character
-    context["from_category"] = from_category
+    if character_raw:
+        # Full character description available
+        character = get_translated_character(character_raw, lang)
+        context["character"] = character
+        context["from_category"] = from_category
 
-    # Get category info
-    category = get_character_category(char_id)
-    if category:
-        context["category"] = {
-            "value": category.value,
-            "name_en": get_category_name(category, "en"),
-            "name_ko": get_category_name(category, "ko"),
+        # Get category info
+        category = get_character_category(char_id)
+        if category:
+            context["category"] = {
+                "value": category.value,
+                "name_en": get_category_name(category, "en"),
+                "name_ko": get_category_name(category, "ko"),
+            }
+
+        # Get related characters if any
+        if character_raw.related_characters:
+            related = []
+            for rel_id in character_raw.related_characters[:5]:  # Limit to 5
+                rel_char = get_character_description(rel_id)
+                if rel_char:
+                    related.append(get_translated_character(rel_char, lang))
+            context["related_characters"] = related
+
+        return templates.TemplateResponse("character_detail.html", context)
+    else:
+        # Fallback: Try to get basic info from GODS_DATABASE
+        god = GODS_DATABASE.get(char_id)
+        if not god:
+            raise HTTPException(status_code=404, detail="Character not found")
+
+        # Create minimal character info from god data
+        god_name = char_id.replace("_", " ").title()
+
+        # Get character image URL
+        char_image_url = ""
+        for ext in ['.png', '.jpg', '.jpeg', '.webp']:
+            img_path = STATIC_DIR / "images" / "gods" / f"{char_id}{ext}"
+            if img_path.exists():
+                char_image_url = f"/static/images/gods/{char_id}{ext}"
+                break
+
+        context["character"] = {
+            "id": char_id,
+            "name": god_name,
+            "tagline": f"{god.domain}",
+            "image_url": char_image_url,
+            "culture": god.culture.value,
+            "archetype": god.archetype.value,
+            "element": god.element,
+            "domain": god.domain,
+            "symbol": god.symbol,
+            "color": god.color,
+            "description": f"A {god.archetype.value} figure from {god.culture.value} mythology, associated with {god.domain}.",
+            "story": "",
+            "powers": [],
+            "personality": [],
         }
+        context["from_category"] = from_category
+        context["is_basic_info"] = True  # Flag to show limited info message
 
-    # Get related characters if any
-    if character_raw.related_characters:
-        related = []
-        for rel_id in character_raw.related_characters[:5]:  # Limit to 5
-            rel_char = get_character_description(rel_id)
-            if rel_char:
-                related.append(get_translated_character(rel_char, lang))
-        context["related_characters"] = related
-
-    return templates.TemplateResponse("character_detail.html", context)
+        return templates.TemplateResponse("character_detail.html", context)
 
 
 @app.get("/api/characters")

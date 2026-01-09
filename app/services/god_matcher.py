@@ -141,27 +141,27 @@ class GodMatcher:
             )
 
             # Calculate overall match score with weights
-            # 관상학이 있으면 가중치 조정
+            # 얼굴형과 눈 타입에 더 높은 가중치 - 가장 직관적인 특성
             if features.physiognomy and god.physiognomy_pref:
-                # 관상학 데이터가 있는 경우: 관상학 30% 반영
+                # 관상학 데이터가 있는 경우
                 match_score = (
-                    face_shape_match * 0.18 +
-                    eye_type_match * 0.18 +
-                    symmetry_match * 0.14 +
-                    intensity_match * 0.20 +
-                    physiognomy_match * 0.30
+                    face_shape_match * 0.30 +    # 얼굴형 가중치 증가
+                    eye_type_match * 0.25 +      # 눈 타입 가중치 증가
+                    symmetry_match * 0.10 +      # 대칭성 가중치 감소
+                    intensity_match * 0.15 +     # 강도 가중치 감소
+                    physiognomy_match * 0.20     # 관상학 가중치 조정
                 )
             else:
-                # 기존 로직 유지
+                # 기존 로직 - 얼굴형과 눈에 집중
                 match_score = (
-                    face_shape_match * 0.25 +
-                    eye_type_match * 0.25 +
-                    symmetry_match * 0.2 +
-                    intensity_match * 0.3
+                    face_shape_match * 0.35 +    # 얼굴형이 가장 중요
+                    eye_type_match * 0.30 +      # 눈 타입 두 번째
+                    symmetry_match * 0.15 +
+                    intensity_match * 0.20
                 )
 
-            # Add small random factor to break ties
-            match_score += random.uniform(0, 0.05)
+            # Very small random factor for tie-breaking only (reduced from 0.05)
+            match_score += random.uniform(0, 0.01)
 
             # Generate reasoning
             reasoning = self._generate_reasoning(

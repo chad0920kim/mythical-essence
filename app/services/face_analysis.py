@@ -322,43 +322,68 @@ class FaceAnalyzer:
         return max(0.0, min(1.0, 1.0 - avg_diff))
 
     def _classify_face_shape(self, width_ratio: float, jaw_ratio: float, forehead_ratio: float) -> str:
-        """Classify face shape based on measurements."""
-        if width_ratio > 0.9:
-            if jaw_ratio > 0.85:
-                return "square"
-            else:
-                return "round"
-        elif width_ratio < 0.7:
-            if forehead_ratio > 0.35:
-                return "oblong"
-            else:
-                return "oval"
-        else:
-            if jaw_ratio < 0.75:
-                if forehead_ratio > 0.35:
-                    return "heart"
-                else:
-                    return "diamond"
-            else:
-                return "oval"
+        """
+        Classify face shape based on measurements.
+        Enhanced logic for more accurate classification.
+
+        - width_ratio: face width / face height (higher = wider face)
+        - jaw_ratio: jaw width / face width (higher = wider jaw)
+        - forehead_ratio: forehead height / face height (higher = taller forehead)
+        """
+        # Square: Wide face with strong jaw
+        if width_ratio > 0.85 and jaw_ratio > 0.82:
+            return "square"
+
+        # Round: Wide face with softer jaw
+        if width_ratio > 0.85 and jaw_ratio <= 0.82:
+            return "round"
+
+        # Oblong: Long narrow face
+        if width_ratio < 0.72 and forehead_ratio > 0.33:
+            return "oblong"
+
+        # Heart: Wider forehead, narrow chin
+        if jaw_ratio < 0.72 and forehead_ratio > 0.32:
+            return "heart"
+
+        # Diamond: Wide cheekbones, narrow forehead and chin
+        if jaw_ratio < 0.75 and forehead_ratio < 0.30:
+            return "diamond"
+
+        # Oval: Balanced proportions (most common, default)
+        return "oval"
 
     def _classify_eye_type(self, size_ratio: float, angle: float, distance_ratio: float) -> str:
-        """Classify eye type based on measurements."""
-        if size_ratio > 0.28:
-            if angle > 0.6:
-                return "wide"
-            else:
-                return "bright"
-        elif size_ratio < 0.22:
-            if angle < 0.4:
-                return "narrow"
-            else:
-                return "deep"
-        else:
-            if angle > 0.5:
-                return "soft"
-            else:
-                return "sharp"
+        """
+        Classify eye type based on measurements.
+        Enhanced logic for more nuanced classification.
+
+        - size_ratio: eye size relative to face
+        - angle: eye opening angle (0-1, narrow to wide)
+        - distance_ratio: distance between eyes relative to face width
+        """
+        # Wide: Large, open eyes
+        if size_ratio > 0.27 and angle > 0.55:
+            return "wide"
+
+        # Bright: Large eyes with alert appearance
+        if size_ratio > 0.27 and angle <= 0.55:
+            return "bright"
+
+        # Narrow: Smaller, more closed eyes
+        if size_ratio < 0.23 and angle < 0.42:
+            return "narrow"
+
+        # Deep: Set-back eyes with intensity
+        if size_ratio < 0.23 and angle >= 0.42:
+            return "deep"
+
+        # Sharp: Medium eyes with angular appearance
+        if angle < 0.48:
+            return "sharp"
+
+        # Soft: Medium eyes with gentle appearance (default)
+        return "soft"
 
     def _calculate_intensity(self, jaw_ratio: float, eye_angle: float, brow_height: float) -> float:
         """Calculate overall facial intensity (soft to intense)."""
