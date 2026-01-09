@@ -308,12 +308,41 @@ async def analyze_face(
                     return f"/static/images/gods/{god_id}{ext}"
             return ""
 
+        # Load character translations for current language
+        char_translations = load_character_translations("base")  # base.json has all languages
+
+        # Helper function to get translated character name
+        def get_character_name(god_id: str, default_name: str) -> str:
+            char_data = char_translations.get(god_id, {})
+            if lang == "ko":
+                return char_data.get("name_ko", default_name)
+            elif lang == "en":
+                return char_data.get("name_en", default_name)
+            else:
+                # For other languages, try language-specific file
+                other_trans = load_character_translations(lang)
+                other_char = other_trans.get(god_id, {})
+                return other_char.get(f"name_{lang}", char_data.get("name_en", default_name))
+
+        # Helper function to get translated match message/reasoning
+        def get_match_reasoning(god_id: str, default_reasoning: str) -> str:
+            char_data = char_translations.get(god_id, {})
+            if lang == "ko":
+                return char_data.get("match_message_ko", default_reasoning)
+            elif lang == "en":
+                return char_data.get("match_message_en", default_reasoning)
+            else:
+                other_trans = load_character_translations(lang)
+                other_char = other_trans.get(god_id, {})
+                return other_char.get(f"match_message_{lang}", char_data.get("match_message_en", default_reasoning))
+
         # Prepare top 3 matches
         top_matches = []
         for m in matches:
+            default_name = m.god.id.replace("_", " ").title()
             top_matches.append({
                 "god_id": m.god.id,
-                "god_name": m.god.id.replace("_", " ").title(),
+                "god_name": get_character_name(m.god.id, default_name),
                 "culture": m.god.culture.value,
                 "archetype": m.god.archetype.value,
                 "element": m.god.element,
@@ -321,7 +350,7 @@ async def analyze_face(
                 "symbol": m.god.symbol,
                 "color": m.god.color,
                 "match_score": round(m.match_score * 100),
-                "reasoning": m.reasoning,
+                "reasoning": get_match_reasoning(m.god.id, m.reasoning),
                 "character_image_url": get_character_image_url(m.god.id),
             })
 
