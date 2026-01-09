@@ -60,3 +60,6 @@ AD_REQUIRED_AFTER = 1  # Show ad after this many uses (can be increased later)
 # AdSense Settings
 ADSENSE_CLIENT_ID = os.getenv("ADSENSE_CLIENT_ID", "")  # ca-pub-XXXXXXXXXX
 ADSENSE_AD_SLOT = os.getenv("ADSENSE_AD_SLOT", "")  # Ad unit ID
+
+# Google Analytics Settings
+GA_MEASUREMENT_ID = os.getenv("GA_MEASUREMENT_ID", "")  # G-XXXXXXXXXX

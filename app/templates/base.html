@@ -42,6 +42,17 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
 
+    <!-- Google Analytics -->
+    {% if ga_measurement_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_measurement_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ ga_measurement_id }}');
+    </script>
+    {% endif %}
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -200,6 +211,7 @@
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center gap-6">
                 <a href="/" class="hover:text-gold transition-colors">{{ t.nav_home }}</a>
+                <a href="/about" class="hover:text-gold transition-colors">{{ t.nav_about }}</a>
                 <a href="/characters" class="hover:text-gold transition-colors">{{ t.nav_characters }}</a>
                 <a href="/gallery" class="hover:text-gold transition-colors">{{ t.nav_gallery }}</a>
 
@@ -228,6 +240,7 @@
         <div id="mobile-menu" class="hidden md:hidden absolute left-0 right-0 top-full bg-darker/95 backdrop-blur-lg border-t border-gold/20 shadow-lg" style="z-index: 9998;">
             <div class="container mx-auto py-4 px-4">
                 <a href="/" class="block py-3 text-gray-200 hover:text-gold transition-colors border-b border-white/10">{{ t.nav_home }}</a>
+                <a href="/about" class="block py-3 text-gray-200 hover:text-gold transition-colors border-b border-white/10">{{ t.nav_about }}</a>
                 <a href="/characters" class="block py-3 text-gray-200 hover:text-gold transition-colors border-b border-white/10">{{ t.nav_characters }}</a>
                 <a href="/gallery" class="block py-3 text-gray-200 hover:text-gold transition-colors border-b border-white/10">{{ t.nav_gallery }}</a>
 

@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.about_title }} - {{ t.app_name }}{% endblock %}
+
+{% block meta_description %}{{ t.about_subtitle }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="font-mythical text-4xl text-gold mb-4">
+                {{ t.about_title }}
+            </h1>
+            <p class="text-xl text-gray-300">
+                {{ t.about_subtitle }}
+            </p>
+        </div>
+
+        <!-- What is MythFace -->
+        <div class="card-mythical p-8 mb-8">
+            <h2 class="font-mythical text-2xl text-gold mb-4">
+                {{ t.about_what_title }}
+            </h2>
+            <p class="text-gray-300 leading-relaxed">
+                {{ t.about_what_content }}
+            </p>
+        </div>
+
+        <!-- How it Works -->
+        <div class="card-mythical p-8 mb-8">
+            <h2 class="font-mythical text-2xl text-gold mb-6">
+                {{ t.about_how_title }}
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                        <span class="text-2xl text-gold font-bold">1</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_how_step1_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_how_step1_content }}
+                    </p>
+                </div>
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                        <span class="text-2xl text-gold font-bold">2</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_how_step2_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_how_step2_content }}
+                    </p>
+                </div>
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center">
+                        <span class="text-2xl text-gold font-bold">3</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_how_step3_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_how_step3_content }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="card-mythical p-8 mb-8">
+            <h2 class="font-mythical text-2xl text-gold mb-6">
+                {{ t.about_features_title }}
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Feature 1 -->
+                <div class="bg-white/5 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_feature1_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_feature1_content }}
+                    </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="bg-white/5 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_feature2_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_feature2_content }}
+                    </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="bg-white/5 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_feature3_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_feature3_content }}
+                    </p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="bg-white/5 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-white mb-2">
+                        {{ t.about_feature4_title }}
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        {{ t.about_feature4_content }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Mythologies -->
+        <div class="card-mythical p-8 mb-8">
+            <h2 class="font-mythical text-2xl text-gold mb-4">
+                {{ t.about_mythology_title }}
+            </h2>
+            <p class="text-gray-300 mb-6">
+                {{ t.about_mythology_content }}
+            </p>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.greek }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.norse }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.korean }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.japanese }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.chinese }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.egyptian }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.hindu }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.roman }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.celtic }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.slavic }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.persian }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.african }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.polynesian }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.native_american }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.arthurian }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.christian }}</span>
+                <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300 text-sm">{{ t.cultures.buddhist }}</span>
+            </div>
+        </div>
+
+        <!-- Privacy & Disclaimer -->
+        <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <!-- Privacy -->
+            <div class="card-mythical p-6">
+                <h2 class="font-mythical text-xl text-gold mb-3">
+                    {{ t.about_privacy_title }}
+                </h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    {{ t.about_privacy_content }}
+                </p>
+            </div>
+            <!-- Disclaimer -->
+            <div class="card-mythical p-6">
+                <h2 class="font-mythical text-xl text-gold mb-3">
+                    {{ t.about_disclaimer_title }}
+                </h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    {{ t.about_disclaimer_content }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Team / Creator -->
+        <div class="card-mythical p-8 mb-8">
+            <h2 class="font-mythical text-2xl text-gold mb-4">
+                {{ t.about_team_title }}
+            </h2>
+            <p class="text-gray-300 leading-relaxed mb-4">
+                {{ t.about_team_content }}
+            </p>
+            <p class="text-gray-400">
+                {{ t.about_contact_cta }}
+            </p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="text-center space-x-4">
+            <a href="/" class="btn-mythical inline-block">
+                {{ t.characters_find_match }}
+            </a>
+            <a href="/contact" class="inline-block px-6 py-3 rounded-lg border border-gold/50 text-gold hover:bg-gold/10 transition-colors">
+                {{ t.footer_contact }}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

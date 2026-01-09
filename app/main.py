@@ -19,7 +19,8 @@ from app.config import (
     SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE,
     MAX_IMAGE_SIZE, ALLOWED_EXTENSIONS,
     FREE_FACE_SWAP_COUNT, AD_REQUIRED_AFTER,
-    ADSENSE_CLIENT_ID, ADSENSE_AD_SLOT
+    ADSENSE_CLIENT_ID, ADSENSE_AD_SLOT,
+    GA_MEASUREMENT_ID
 )
 from app.services.face_analysis import get_face_analyzer
 from app.services.god_matcher import match_face_to_god, get_primary_match
@@ -178,6 +179,7 @@ def get_base_context(request: Request) -> dict:
         "ad_required": usage_count >= AD_REQUIRED_AFTER,
         "adsense_client_id": ADSENSE_CLIENT_ID,
         "adsense_ad_slot": ADSENSE_AD_SLOT,
+        "ga_measurement_id": GA_MEASUREMENT_ID,
     }
 
 
@@ -521,6 +523,13 @@ async def contact(request: Request):
     return templates.TemplateResponse("contact.html", context)
 
 
+@app.get("/about", response_class=HTMLResponse)
+async def about(request: Request):
+    """Display about page."""
+    context = get_base_context(request)
+    return templates.TemplateResponse("about.html", context)
+
+
 @app.get("/gallery", response_class=HTMLResponse)
 async def gallery(request: Request, culture: Optional[str] = None):
     """Display gallery of all gods."""
@@ -732,7 +741,7 @@ async def sitemap(request: Request):
     xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
 
     # Static pages
-    static_pages = ['/', '/characters', '/gallery', '/privacy', '/terms', '/contact']
+    static_pages = ['/', '/about', '/characters', '/gallery', '/privacy', '/terms', '/contact']
     for page in static_pages:
         xml_content += f'  <url>\n    <loc>{base_url}{page}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>{"1.0" if page == "/" else "0.8"}</priority>\n  </url>\n'
 
