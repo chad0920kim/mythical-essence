@@ -82,6 +82,10 @@ class FaceFeatures:
     eye_type: str            # sharp, soft, wide, narrow, deep, bright
     intensity_level: float   # 0-1, soft to intense features
 
+    # Gender estimation
+    gender: str = "neutral"  # "male", "female", "neutral"
+    gender_confidence: float = 0.5  # 0-1, confidence in gender estimation
+
     # 관상학 특성 (Physiognomy traits)
     physiognomy: Optional[PhysiognomyTraits] = None
 
@@ -263,6 +267,12 @@ class FaceAnalyzer:
             jaw_width_ratio, eye_size_ratio, eye_angle, brow_height, mouth_width_ratio
         )
 
+        # 성별 추정
+        gender, gender_confidence = self._estimate_gender(
+            jaw_width_ratio, face_width_ratio, eye_size_ratio,
+            eye_angle, brow_height, mouth_width_ratio, forehead_ratio
+        )
+
         return FaceFeatures(
             face_width_ratio=face_width_ratio,
             jaw_width_ratio=jaw_width_ratio,
@@ -276,6 +286,8 @@ class FaceAnalyzer:
             face_shape=face_shape,
             eye_type=eye_type,
             intensity_level=intensity_level,
+            gender=gender,
+            gender_confidence=gender_confidence,
             physiognomy=physiognomy
         )
 
@@ -357,6 +369,78 @@ class FaceAnalyzer:
         intensity += (0.06 - brow_height) * 5  # Brow contribution
 
         return max(0.0, min(1.0, 0.5 + intensity))
+
+    def _estimate_gender(
+        self, jaw_width_ratio: float, face_width_ratio: float,
+        eye_size_ratio: float, eye_angle: float, brow_height: float,
+        mouth_width_ratio: float, forehead_ratio: float
+    ) -> tuple[str, float]:
+        """
+        Estimate gender based on facial features.
+        Returns (gender, confidence) where gender is "male", "female", or "neutral"
+
+        Based on general facial dimorphism:
+        - Males: wider jaw, larger brow ridge, wider face
+        - Females: smaller jaw, higher eyebrows, larger eyes relative to face
+        """
+        male_score = 0.0
+        female_score = 0.0
+
+        # Jaw width: males tend to have wider, more angular jaws
+        if jaw_width_ratio > 0.82:
+            male_score += 0.2
+        elif jaw_width_ratio < 0.75:
+            female_score += 0.2
+
+        # Face width ratio: males tend to have wider faces
+        if face_width_ratio > 0.85:
+            male_score += 0.15
+        elif face_width_ratio < 0.75:
+            female_score += 0.15
+
+        # Eye size: females tend to have proportionally larger eyes
+        if eye_size_ratio > 0.28:
+            female_score += 0.2
+        elif eye_size_ratio < 0.24:
+            male_score += 0.15
+
+        # Eye angle (openness): females tend to have more open eyes
+        if eye_angle > 0.55:
+            female_score += 0.15
+        elif eye_angle < 0.45:
+            male_score += 0.1
+
+        # Brow height: females tend to have higher eyebrows
+        if brow_height > 0.065:
+            female_score += 0.15
+        elif brow_height < 0.05:
+            male_score += 0.15
+
+        # Forehead ratio: subtle differences
+        if forehead_ratio > 0.35:
+            female_score += 0.1
+        elif forehead_ratio < 0.30:
+            male_score += 0.1
+
+        # Mouth width: males tend to have wider mouths
+        if mouth_width_ratio > 0.42:
+            male_score += 0.1
+        elif mouth_width_ratio < 0.38:
+            female_score += 0.1
+
+        # Determine gender and confidence
+        total_score = male_score + female_score
+        if total_score == 0:
+            return "neutral", 0.5
+
+        if male_score > female_score:
+            confidence = 0.5 + (male_score - female_score) / 2
+            return "male", min(0.95, confidence)
+        elif female_score > male_score:
+            confidence = 0.5 + (female_score - male_score) / 2
+            return "female", min(0.95, confidence)
+        else:
+            return "neutral", 0.5
 
     def _analyze_physiognomy(
         self, points: dict, face_width: float, face_height: float,

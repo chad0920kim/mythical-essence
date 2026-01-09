@@ -84,6 +84,7 @@ class GodMatcher:
         """
         Match facial features to gods.
         관상학 기반 매칭 로직 포함.
+        성별 기반 필터링 포함.
 
         Args:
             features: Extracted facial features
@@ -97,7 +98,23 @@ class GodMatcher:
         face_shape_enum = self.FACE_SHAPE_MAP.get(features.face_shape, FaceShape.OVAL)
         eye_type_enum = self.EYE_TYPE_MAP.get(features.eye_type, EyeType.SOFT)
 
-        for god in self.available_gods:
+        # Filter gods by detected gender if confidence is high enough
+        detected_gender = getattr(features, 'gender', 'neutral')
+        gender_confidence = getattr(features, 'gender_confidence', 0.5)
+
+        # Only filter by gender if confidence > 0.6
+        if gender_confidence > 0.6 and detected_gender in ['male', 'female']:
+            gods_to_match = [
+                god for god in self.available_gods
+                if god.gender == detected_gender or god.gender == 'neutral'
+            ]
+            # Fallback if too few gods match
+            if len(gods_to_match) < 10:
+                gods_to_match = self.available_gods
+        else:
+            gods_to_match = self.available_gods
+
+        for god in gods_to_match:
             # Calculate face shape match
             face_shape_match = self._calculate_face_shape_match(
                 face_shape_enum, god.preferred_face_shapes
