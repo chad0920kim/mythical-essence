@@ -159,9 +159,10 @@
     </div>
 
     <!-- Image Preview Modal -->
-    <div id="imagePreviewModal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-[60] hidden" onclick="closeImagePreview()">
-        <button onclick="event.stopPropagation(); closeImagePreview()" class="absolute top-4 right-4 text-white text-4xl hover:text-gold transition-colors z-10 w-12 h-12 flex items-center justify-center">&times;</button>
-        <img id="previewLargeImage" src="" alt="Preview" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg" onclick="event.stopPropagation()">
+    <div id="imagePreviewModal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-[60] hidden">
+        <div class="absolute inset-0" onclick="closeImagePreview()"></div>
+        <button id="imagePreviewCloseBtn" class="absolute top-4 right-4 text-white text-4xl hover:text-gold transition-colors z-20 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full">&times;</button>
+        <img id="previewLargeImage" src="" alt="Preview" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg relative z-10">
     </div>
 
     <!-- Face Swap Result Modal -->
@@ -513,9 +514,14 @@ function showResult(data) {
                     <div class="text-gold text-lg mb-3">${match.match_score}% ${translations.result_match || 'Match'}</div>
                     <div class="text-gray-400 text-sm mb-2">${cultureLabel} · ${archetypeLabel}</div>
                     <p class="text-gray-500 text-xs line-clamp-2">${match.reasoning}</p>
-                    <button class="btn-mythical mt-4 text-sm py-2 px-4" onclick="selectCharacter('${match.god_id}', '${match.god_name}')">
-                        ✨ ${translations.select_character || 'Select'}
-                    </button>
+                    <div class="flex gap-2 mt-4 justify-center">
+                        <button class="btn-mythical text-sm py-2 px-4" onclick="selectCharacter('${match.god_id}', '${match.god_name}')">
+                            ✨ ${translations.select_character || 'Select'}
+                        </button>
+                        <button class="px-4 py-2 text-sm border border-gold text-gold rounded-full hover:bg-gold/10 transition-colors" onclick="viewCharacterStory('${match.god_id}')">
+                            📖 ${translations.view_story || 'Story'}
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -555,6 +561,17 @@ function showImagePreview(imageUrl) {
 
 function closeImagePreview() {
     document.getElementById('imagePreviewModal').classList.add('hidden');
+}
+
+// Add event listener for X button
+document.getElementById('imagePreviewCloseBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeImagePreview();
+});
+
+function viewCharacterStory(godId) {
+    window.open('/characters/' + godId, '_blank');
 }
 
 async function performFaceSwap() {
