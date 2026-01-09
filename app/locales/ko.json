@@ -33,6 +33,7 @@
   "upload_formats": "지원 형식: JPG, PNG, WebP (최대 10MB)",
   "upload_privacy": "업로드된 이미지는 분석 후 즉시 삭제됩니다",
 
+  "analyze_button": "분석하기",
   "analyzing": "분석 중...",
   "analyzing_message": "신들의 세계에서 당신의 본질을 찾고 있습니다",
   "analyzing_step1": "업로드",

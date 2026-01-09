@@ -33,6 +33,7 @@
   "upload_formats": "Supported formats: JPG, PNG, WebP (max 10MB)",
   "upload_privacy": "Uploaded images are deleted immediately after analysis",
 
+  "analyze_button": "Analyze",
   "analyzing": "Analyzing...",
   "analyzing_message": "Searching for your essence in the realm of gods",
   "analyzing_step1": "Upload",
