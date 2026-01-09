@@ -160,8 +160,8 @@
 
     <!-- Image Preview Modal -->
     <div id="imagePreviewModal" class="fixed inset-0 bg-black/95 flex items-center justify-center z-[60] hidden" onclick="closeImagePreview()">
-        <button onclick="closeImagePreview()" class="absolute top-4 right-4 text-white text-3xl hover:text-gold transition-colors">&times;</button>
-        <img id="previewLargeImage" src="" alt="Preview" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg">
+        <button onclick="event.stopPropagation(); closeImagePreview()" class="absolute top-4 right-4 text-white text-4xl hover:text-gold transition-colors z-10 w-12 h-12 flex items-center justify-center">&times;</button>
+        <img id="previewLargeImage" src="" alt="Preview" class="max-w-[90vw] max-h-[90vh] object-contain rounded-lg" onclick="event.stopPropagation()">
     </div>
 
     <!-- Face Swap Result Modal -->
